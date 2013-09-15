@@ -35,7 +35,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   initcount += 1;
-  if (initcount % 2 === 1) {
+  if (initcount % 2 === 1) {   
     roomcount += 1;
     room = roomcount.toString();
     roomList[room] = {user1: socket.id};
@@ -44,23 +44,26 @@ io.sockets.on('connection', function (socket) {
   }
   socket.join(room);
   socket['room'] = room;
-  socket.in(room).emit('join', room);
+  socket.in(room).emit('join', room) //being triggered twice and freezing.
 
   socket.on('init', function (room) {
     if (initcount % 2 === 0){
-      console.log('Initialize New Match');
-      socket.emit('modalEnd');
-      
+        console.log('Initialize New Match in room ' , room);
+        socket.emit('modalEnd');   
       // game = new serverGame();
       // roomList[room].game = game;
       // roomList[room].game.initGame();
       // userSocket.in(room).broadcast.emit('serverChickens', roomList[room].game.serverChickens, roomList[room].game.serverSpiders);
       // userSocket.in(room).emit('serverChickens', roomList[room].game.serverChickens, roomList[room].game.serverSpiders);
       } else{
-        console.log("Waiting for an opponent");
-        socket.emit('modalStart');
+          console.log("Waiting for an opponent in room ", room);
+          socket.emit('modalStart');
       }
-   });
+  });
+
+  socket.on('disconnect', function () {
+    console.log('Disconnected');
+  });
 });
 
 server.listen(3000);
