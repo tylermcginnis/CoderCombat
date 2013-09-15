@@ -49,6 +49,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('init', function (room) {
     if (initcount % 2 === 0){
       console.log('Initialize New Match');
+      socket.emit('modalEnd');
       
       // game = new serverGame();
       // roomList[room].game = game;
@@ -57,6 +58,7 @@ io.sockets.on('connection', function (socket) {
       // userSocket.in(room).emit('serverChickens', roomList[room].game.serverChickens, roomList[room].game.serverSpiders);
       } else{
         console.log("Waiting for an opponent");
+        socket.emit('modalStart');
       }
    });
 });
