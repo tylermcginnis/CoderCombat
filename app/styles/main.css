@@ -1,0 +1,160 @@
+body {
+    background: #fff;
+    font-family: 'Lato', sans-serif;
+    color: #333;
+}
+
+#main-container{
+    width: 90%;
+    margin: 20px auto;
+}
+
+#coding-challenge-header{
+    font-family: 'Lato', sans-serif;
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: 20px;
+    font-weight: 300;
+    font-style: italic;
+
+}
+
+#logo-challenge-container {
+    width: 100%;
+    height: 180px;
+    padding-bottom: 50px;
+    overflow: hidden;
+    font-family: 'Lato', sans-serif;
+}
+
+#coding-challenge-container {
+    width: 61%;
+    float: left;
+    letter-spacing: 1px;
+    line-height: 26px;
+    margin-top: 30px;
+}
+
+#logo-container {
+    float: left;
+    width: 22%;
+    height: 150px;
+    background: #ccc;
+    margin-left: 16%;
+}
+
+#coding-challenge{
+    height: 200px;
+}
+
+#editors-container {
+    overflow: hidden;
+    width: 100%;
+}
+
+#editor_submit-container {
+    float: left;
+    width: 60%;
+    padding-top: 5px;
+}
+
+#player-editor {
+    position: relative;
+    height: 500px;
+    width: 100%;
+    left: 5px;
+    border: 1px solid #D5D5D5;
+}
+
+#opponent-editor {
+    float: left;
+    margin-left: 2%;
+    height: 500px;
+    width: 37.5%;
+    margin-top: 5px;
+    border: 1px solid #D5D5D5;
+}
+
+#rightEditor {
+    height: 100%;
+    width: 100%;
+}
+
+#leftEditor { 
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#submit{
+    margin-top: 10px;
+    background: black;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    width: 60px;
+}
+
+#footer{
+    text-align: center;
+}
+
+#footer li {
+    display: inline;
+    margin: 25px;
+    color: rgba(51, 51, 51, 0.33);
+}
+
+#footer li:hover{
+    color: #333;
+    cursor: pointer;
+}
+
+#button {
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fcfcfc), color-stop(1, #f0f0f0) );
+    background:-moz-linear-gradient( center top, #fcfcfc 5%, #f0f0f0 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f0f0f0');
+    background-color:#fcfcfc;
+    -webkit-border-top-left-radius:6px;
+    -moz-border-radius-topleft:6px;
+    border-top-left-radius:6px;
+    -webkit-border-top-right-radius:6px;
+    -moz-border-radius-topright:6px;
+    border-top-right-radius:6px;
+    -webkit-border-bottom-right-radius:6px;
+    -moz-border-radius-bottomright:6px;
+    border-bottom-right-radius:6px;
+    -webkit-border-bottom-left-radius:6px;
+    -moz-border-radius-bottomleft:6px;
+    border-bottom-left-radius:6px;
+    text-indent:0;
+    border:1px solid #dcdcdc;
+    display:inline-block;
+    color:#777777;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    font-style:normal;
+    height:43px;
+    line-height:43px;
+    width:88px;
+    text-decoration:none;
+    text-align:center;
+    text-shadow:1px 1px 0px #ffffff;
+    margin-top: 15px;
+    cursor: pointer;
+}
+#button:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f0f0f0), color-stop(1, #ededed) );
+    background:-moz-linear-gradient( center top, #f0f0f0 5%, #ededed 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0f0f0', endColorstr='#ededed');
+    background-color:#f0f0f0;
+    color: #4e4e4e;
+}#button:active {
+    position:relative;
+    top:1px;
+}
+
