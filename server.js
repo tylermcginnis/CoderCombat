@@ -49,20 +49,17 @@ io.sockets.on('connection', function (socket) {
   socket.on('init', function (room) {
     if (initcount % 2 === 0){
         console.log('Initialize New Match in room ' , room);
-        socket.emit('modalEnd');   
-      // game = new serverGame();
-      // roomList[room].game = game;
-      // roomList[room].game.initGame();
-      // userSocket.in(room).broadcast.emit('serverChickens', roomList[room].game.serverChickens, roomList[room].game.serverSpiders);
-      // userSocket.in(room).emit('serverChickens', roomList[room].game.serverChickens, roomList[room].game.serverSpiders);
+        // socket.emit('modalEnd');   
+    
       } else{
           console.log("Waiting for an opponent in room ", room);
-          socket.emit('modalStart');
+          // socket.emit('modalStart');
       }
   });
 
   socket.on('disconnect', function () {
     console.log('Disconnected');
+    //Do Something here
   });
 });
 
