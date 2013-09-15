@@ -5,7 +5,7 @@ angular.module('CoderCombatApp.services', [])
       on: function(eventName, callback){
         socket.on(eventName, function(){
           var args = arguments;
-          $rootScope.$apply(function(){
+          $rootScope.safeApply(function(){
             callback.apply(socket, args);
           });
         });
@@ -14,7 +14,7 @@ angular.module('CoderCombatApp.services', [])
         socket.emit(eventName, data, function(){
           var args = arguments;
         });
-        $rootScope.$apply(function(){
+        $rootScope.safeApply(function(){
           if(callback){
             callback.apply(socket, args);
           }
