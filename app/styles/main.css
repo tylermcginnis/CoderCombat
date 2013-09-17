@@ -37,10 +37,9 @@ body {
 
 #logo-container {
     float: left;
-    width: 22%;
-    height: 150px;
-    background: #ccc;
-    margin-left: 16%;
+    width: 36%;
+    margin-left: 1%;
+    line-height: 234px;
 }
 
 #coding-challenge{
