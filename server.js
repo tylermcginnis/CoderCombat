@@ -17,18 +17,26 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.on('disconnected', function(){
   console.log("Disconnected from DB");
 });
-db.once('open', function(){
-  var questionSchemea = new mongoose.Schema({
-    question: String,
-    answer: String
-  });
 
-  var question = db.model('Question', questionSchemea);
+db.once('open', function(){
+  console.log('Connection is Open');
 });
 
+// var question = db.model('Question', questionSchemea);
+var questionschema = require("./app/schemas/questionSchema.js");
 
 app.get('/', function(req, res){
-  res.sendfile(__dirname + '/app/index.html')
+  var collectionName = 'questions';
+  var processor = db.model('questions', questionschema.questionSchema, collectionName, false);
+  // var newCont = new processor({'question': 'This is the questions again', 'answer': 'This is the answer'});
+  // newCont.save(function(err,response){});
+  processor.find().execFind(function(err, rt){
+    res.sendfile(__dirname + '/app/index.html');
+    res.send(rt);
+  });
+
+
+  // res.sendfile(__dirname + '/app/index.html')
 });
  
 app.use(express.static(__dirname + '/app/'));
