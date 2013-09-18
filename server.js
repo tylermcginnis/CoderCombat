@@ -6,9 +6,25 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
  
-var app = express(),
-    server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
+var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+var mongoose = require('mongoose');
+
+var db = mongoose.createConnection("localhost", "codercombat");
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.on('disconnected', function(){
+  console.log("Disconnected from DB");
+});
+db.once('open', function(){
+  var questionSchemea = new mongoose.Schema({
+    question: String,
+    answer: String
+  });
+
+  var question = db.model('Question', questionSchemea);
+});
 
 
 app.get('/', function(req, res){
