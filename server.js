@@ -55,10 +55,8 @@ var room;
 var initcount = 0;
 var roomcount = 0;
 var roomList = {};
-var game;
 
 io.sockets.on('connection', function (socket) {
-  console.log("HEReEE");
   socket.on('initialEditor', function(editorText){
     var room = socket['room'];
     socket.broadcast.to(room).emit('setInitialVals', editorText);
@@ -69,6 +67,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   initcount += 1;
+  console.log("ON CONN INIT COUNT", initcount);
   if (initcount % 2 === 1) {   
     roomcount += 1;
     room = roomcount.toString();
@@ -90,11 +89,32 @@ io.sockets.on('connection', function (socket) {
           socket.emit('modalStart');
       }
   });
-
+  
+  //SOLUTION: If there is no one undefined,
+  //decrement. If there is already someone undefined, 
+  //don't decrement.
   socket.on('disconnect', function () {
     console.log('Disconnected');
+    var disconUser = socket.id;
+
+    //Going to leave this for now. This loop makes it so if a user disconnects,
+    //their userid goes undefined. I was thinking maybe theres a way to tell if 
+    //we need to decrement or not based off this value. Can't get it to work though. 
+    for (var prop in roomList) {
+        if (roomList[prop].user1 === disconUser){
+          roomList[prop].user1 = undefined;
+        } else if(roomList[prop].user2 === disconUser){
+          roomList[prop].user2 = undefined
+        }
+
+        if(roomList[prop].user1 === undefined && roomList[prop].user2 === undefined){
+          delete roomList[prop];
+        }
+    }
+    console.log(roomList);
     var room = socket['room'];
-    initcount +=1;
+    initcount -=1; //if two people disconnect, the % math breaks
+    console.log("INIT AFTER DISC: " , initcount);
     socket.broadcast.to(room).emit('oppDisconnect');
   });
 });

@@ -28,6 +28,8 @@ angular.module('CoderCombatApp.controllers', [])
       });
     });
     socket.on('modalEnd', function(){
-      $scope.$modal('hide');
+      if($scope.$modal){
+        $scope.$modal('hide');
+      }
     })
 }]);
