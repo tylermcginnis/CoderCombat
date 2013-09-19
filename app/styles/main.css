@@ -174,7 +174,7 @@ body {
 
 /*Start Modal Styling */ 
 .modal.fade.in {
-    border: 9px solid black;
+    border: 4px solid black;
 }
 .head h3 {
     text-align: center;

@@ -12,6 +12,14 @@ angular.module('CoderCombatApp.controllers', [])
     socket.on('join', function (room) {
         socket.emit('init', room);
     });
+    socket.on('oppDisconnect', function(){
+      $modal({
+        template: '../../views/disconnect-modal.html',
+        keyboard: false,
+        scope: $scope
+      });
+      //HERE. WHEN DISCONNECT, SHOW MODAL (above), AND DO SOME MORE STUFF I"M TOO TIRED TO THINK OF NOW.
+    });
     socket.on('modalStart', function(){
       $modal({
         template: '../../views/pairing-modal.html',

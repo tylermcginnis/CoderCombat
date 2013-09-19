@@ -91,8 +91,9 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function () {
-    console.log('Disconnected');
-    //Do Something here
+    var id = socket.id;
+    var room = socket['room'];
+    socket.broadcast.to(room).emit('oppDisconnect');
   });
 });
 
