@@ -31,16 +31,6 @@ app.get('/', function(req, res){
 app.get('/getQuestion', function(req, res){ //refactor to send back random question
   var collectionName = 'questions';
   var processor = db.model('questions', questionschema.questionSchema, collectionName, false);
-  // var rand = Math.random();
-  // var cmp  = Math.random();
-  // var result = processor.find( {random : { $gte : rand } } );
-  // if ( result == null ) {
-  //   result = processor.find( {random : { $lte : rand } } );
-  // }
-  // result.execFind(function(err, dataFromDb){
-  //   res.send(dataFromDb);
-  // });
-
   processor.find().execFind(function(err, dataFromDb){
     res.send(dataFromDb);
   });

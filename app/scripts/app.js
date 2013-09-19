@@ -3,7 +3,6 @@ angular.module('CoderCombatApp', ['CoderCombatApp.controllers', 'CoderCombatApp.
     $routeProvider
       .when('/', {
         templateUrl: 'views/challengePage.html',
-        controller: 'mainCntrl'
       })
       .otherwise({
         redirectTo: '/'

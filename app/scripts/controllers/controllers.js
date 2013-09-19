@@ -3,14 +3,10 @@ angular.module('CoderCombatApp.controllers', [])
     httpConnect.connect()
         .success(function(data, status){
           var rnd = Math.floor(Math.random() * data.length-1) + 1;
-          console.log(rnd);
-          console.log(data);
-          console.log(data[rnd]);
           $scope.challenge = data[rnd].question;
         }).error(function(data, status){
           console.log("An error occured on httpConnect");
         });
-
     socket.on('join', function (room) {
         socket.emit('init', room);
     });
