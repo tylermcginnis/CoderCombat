@@ -7,15 +7,21 @@ angular.module('CoderCombatApp', ['CoderCombatApp.controllers', 'CoderCombatApp.
       .otherwise({
         redirectTo: '/'
       });
-  }]).run(['$rootScope', function($rootScope) {
-        $rootScope.safeApply = function(fn) {
-            var phase = this.$root.$$phase;
-            if(phase == '$apply' || phase == '$digest') {
-                if(fn && (typeof(fn) === 'function')) {
-                    fn();
-                }
-            } else {
-                this.$apply(fn);
-            }
-        };
-    }]);;
+  }])
+  .run(['$rootScope', function($rootScope) {
+    $rootScope.safeApply = function(fn) {
+      var phase = this.$root.$$phase;
+      if(phase == '$apply' || phase == '$digest') {
+          if(fn && (typeof(fn) === 'function')) {
+              fn();
+          }
+      } else {
+          this.$apply(fn);
+        }
+    };
+  }]);;
+
+//Todo Thursday
+//Fix Modal
+//Add font, perfect design
+//Figure out how to evaluate code and declare a winner (When you get to this break it up more)

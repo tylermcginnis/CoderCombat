@@ -73,12 +73,12 @@ io.sockets.on('connection', function (socket) {
   }
   socket.join(room);
   socket['room'] = room;
-  socket.in(room).emit('join', room) //being triggered twice and freezing.
+  socket.in(room).emit('join', room);
 
   socket.on('init', function (room) {
     if (initcount % 2 === 0){
         console.log('Initialize New Match in room ' , room);
-        socket.emit('modalEnd');   
+        socket.broadcast.emit('modalEnd');   
     
       } else{
           console.log("Waiting for an opponent in room ", room);
