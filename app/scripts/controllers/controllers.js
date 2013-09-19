@@ -4,6 +4,7 @@ angular.module('CoderCombatApp.controllers', [])
         .success(function(data, status){
           var rnd = Math.floor(Math.random() * data.length-1) + 1;
           $scope.challenge = data[rnd].question;
+          $scope.title = data[rnd].title;
         }).error(function(data, status){
           console.log("An error occured on httpConnect");
         });
