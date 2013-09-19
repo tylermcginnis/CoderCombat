@@ -7,6 +7,8 @@ angular.module('CoderCombatApp.controllers', [])
         }).error(function(data, status){
           console.log("An error occured on httpConnect");
         });
+        
+    var modalInstance;
     socket.on('join', function (room) {
         socket.emit('init', room);
     });
