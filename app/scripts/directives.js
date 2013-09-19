@@ -8,6 +8,11 @@ angular.module('CoderCombatApp.directives', [])
           editor.setTheme("ace/theme/eclipse");
           editor.getSession().setUseWrapMode(true);
           editor.getSession().setMode("ace/mode/javascript");
+          var editorText = editor.getSession().getValue();
+          socket.emit('initialEditor', editorText);
+          socket.on('setInitialVals', function (text) {
+            editor.getSession().setValue(text);
+          });
           editor.on('change', function(changeObj){
             var currentText = editor.getSession().getValue();
             socket.emit('editorChange', currentText);
@@ -25,7 +30,12 @@ angular.module('CoderCombatApp.directives', [])
           oEditor.setTheme("ace/theme/eclipse");
           oEditor.getSession().setUseWrapMode(true);
           oEditor.getSession().setMode("ace/mode/javascript");
+          var editorText = oEditor.getSession().getValue();
+          socket.emit('initial', editorText);
           oEditor.setReadOnly(true);
+          socket.on('setInitialVals', function (text) {
+            oEditor.getSession().setValue(text);
+          });
           socket.on('sendChange', function (text) {
             oEditor.getSession().setValue(text);
           });

@@ -58,9 +58,13 @@ var roomList = {};
 var game;
 
 io.sockets.on('connection', function (socket) {
+  socket.on('initialEditor', function(editorText){
+    var room = socket['room'];
+    socket.broadcast.to(room).emit('setInitialVals', editorText);
+  });
   socket.on('editorChange', function(fullText){
     var room = socket['room'];
-      socket.broadcast.to(room).emit('sendChange', fullText);
+    socket.broadcast.to(room).emit('sendChange', fullText);
   });
 
   initcount += 1;
