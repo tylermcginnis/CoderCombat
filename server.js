@@ -22,21 +22,18 @@ db.once('open', function(){
   console.log('Connection is Open');
 });
 
-// var question = db.model('Question', questionSchemea);
 var questionschema = require("./app/schemas/questionSchema.js");
 
 app.get('/', function(req, res){
+  res.sendfile(__dirname + '/app/index.html');
+});
+
+app.get('/getQuestion', function(req, res){
   var collectionName = 'questions';
   var processor = db.model('questions', questionschema.questionSchema, collectionName, false);
-  // var newCont = new processor({'question': 'This is the questions again', 'answer': 'This is the answer'});
-  // newCont.save(function(err,response){});
-  processor.find().execFind(function(err, rt){
-    res.sendfile(__dirname + '/app/index.html');
-    res.send(rt);
+  processor.find().execFind(function(err, dataFromDb){
+    res.send(dataFromDb);
   });
-
-
-  // res.sendfile(__dirname + '/app/index.html')
 });
  
 app.use(express.static(__dirname + '/app/'));
