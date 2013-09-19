@@ -31,11 +31,29 @@ app.get('/', function(req, res){
 app.get('/getQuestion', function(req, res){ //refactor to send back random question
   var collectionName = 'questions';
   var processor = db.model('questions', questionschema.questionSchema, collectionName, false);
+  // var rand = Math.random();
+  // var cmp  = Math.random();
+  // var result = processor.find( {random : { $gte : rand } } );
+  // if ( result == null ) {
+  //   result = processor.find( {random : { $lte : rand } } );
+  // }
+  // result.execFind(function(err, dataFromDb){
+  //   res.send(dataFromDb);
+  // });
+
   processor.find().execFind(function(err, dataFromDb){
     res.send(dataFromDb);
   });
 });
  
+var allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+} 
+
+app.use(allowCrossDomain);
 app.use(express.static(__dirname + '/app/'));
 app.use(express.favicon());
 app.use(express.logger('dev'));

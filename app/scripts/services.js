@@ -28,7 +28,6 @@ angular.module('CoderCombatApp.services', [])
         url: 'http://localhost:3000/getQuestion'
       });
     }
-
     return {
       connect : function(){ return makeRequest();}
     }
