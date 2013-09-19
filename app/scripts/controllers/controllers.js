@@ -8,7 +8,6 @@ angular.module('CoderCombatApp.controllers', [])
           console.log("An error occured on httpConnect");
         });
 
-    var modalInstance;
     socket.on('join', function (room) {
         socket.emit('init', room);
     });
@@ -19,7 +18,7 @@ angular.module('CoderCombatApp.controllers', [])
         scope: $scope
       });
     });
-    socket.on('modalEnd', function(){ //modalEnd is being triggered on the wrong player
+    socket.on('modalEnd', function(){
       $scope.$modal('hide');
     })
 }]);
