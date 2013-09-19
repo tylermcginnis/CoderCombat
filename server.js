@@ -28,7 +28,7 @@ app.get('/', function(req, res){
   res.sendfile(__dirname + '/app/index.html');
 });
 
-app.get('/getQuestion', function(req, res){
+app.get('/getQuestion', function(req, res){ //refactor to send back random question
   var collectionName = 'questions';
   var processor = db.model('questions', questionschema.questionSchema, collectionName, false);
   processor.find().execFind(function(err, dataFromDb){

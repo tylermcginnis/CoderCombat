@@ -21,4 +21,15 @@ angular.module('CoderCombatApp.services', [])
         });
       }
     }
-  });
+  }).factory('httpConnect', ['$http', function($http){
+    var makeRequest = function(){
+      return $http({
+        method: 'GET',
+        url: 'http://localhost:3000/getQuestion'
+      });
+    }
+
+    return {
+      connect : function(){ return makeRequest();}
+    }
+  }]);

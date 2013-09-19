@@ -1,7 +1,13 @@
 angular.module('CoderCombatApp.controllers', [])
-  .controller('mainCntrl', ['$scope', 'socket', '$modal', function ($scope, socket, $modal) {
+  .controller('mainCntrl', ['$scope', 'socket', '$modal', 'httpConnect', function ($scope, socket, $modal, httpConnect) {
     
-    $scope.challenge = "Using the JavaScript language, have the function LetterChanges(str) take the str parameter being passed and modify it using the following algorithm. Replace every letter in the string with the letter following it in the alphabet (ie. c becomes d, z becomes a).Then capitalize every vowel in this new string (a, e, i, o, u) and finally return this modified string.";
+    httpConnect.connect()
+        .success(function(data, status){
+          console.log("DATA!!!", data)
+          $scope.challenge = data[0].question;
+        }).error(function(data, status){
+          console.log("An error occured on httpConnect");
+        });
 
     socket.on('join', function (room) {
         socket.emit('init', room);
