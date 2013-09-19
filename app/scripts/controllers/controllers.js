@@ -18,7 +18,7 @@ angular.module('CoderCombatApp.controllers', [])
         keyboard: false,
         scope: $scope
       });
-      //HERE. WHEN DISCONNECT, SHOW MODAL (above), AND DO SOME MORE STUFF I"M TOO TIRED TO THINK OF NOW.
+      socket.emit('connection');
     });
     socket.on('modalStart', function(){
       $modal({

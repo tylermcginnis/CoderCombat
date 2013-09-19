@@ -58,6 +58,7 @@ var roomList = {};
 var game;
 
 io.sockets.on('connection', function (socket) {
+  console.log("HEReEE");
   socket.on('initialEditor', function(editorText){
     var room = socket['room'];
     socket.broadcast.to(room).emit('setInitialVals', editorText);
@@ -91,8 +92,9 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function () {
-    var id = socket.id;
+    console.log('Disconnected');
     var room = socket['room'];
+    initcount +=1;
     socket.broadcast.to(room).emit('oppDisconnect');
   });
 });
