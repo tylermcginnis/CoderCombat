@@ -1,14 +1,18 @@
 angular.module('CoderCombatApp.controllers', [])
   .controller('mainCntrl', ['$scope', 'socket', '$modal', 'httpConnect', function ($scope, socket, $modal, httpConnect) { 
+    var questionObj = {};
     httpConnect.connect()
         .success(function(data, status){
           var rnd = Math.floor(Math.random() * data.length-1) + 1;
-          $scope.challenge = data[rnd].question;
-          $scope.title = data[rnd].title;
+          questionObj.title = data[rnd].title;
+          questionObj.challenge = data[rnd].question;
         }).error(function(data, status){
           console.log("An error occured on httpConnect");
         });
-
+    socket.on('updateQuestion', function(questionObj){
+      $scope.challenge = questionObj.challenge;
+      $scope.title = questionObj.title;
+    });
     socket.on('join', function (room) {
         socket.emit('init', room);
     });
@@ -31,5 +35,6 @@ angular.module('CoderCombatApp.controllers', [])
       if($scope.$modal){
         $scope.$modal('hide');
       }
+      socket.emit('sendQuestion', questionObj);
     })
 }]);

@@ -22,6 +22,4 @@ angular.module('CoderCombatApp', ['CoderCombatApp.controllers', 'CoderCombatApp.
   }]);;
 
 //Todo Thursday
-//Figure out what to do when someone 'disconnects' from the room
-//Make sure the 'room' has the same question/problem. Pause a bit on start?
 //Figure out how to evaluate code and declare a winner (When you get to this break it up more)
