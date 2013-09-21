@@ -52,9 +52,9 @@ angular.module('CoderCombatApp.controllers', [])
       userAnswer.push('(' + "'" + parameter + "'" + ')'+ ')');
       userAnswer = userAnswer.join("");
       var result = eval(userAnswer);
-      if(result === answer){
+      if(result === answer){ //emit to both parties that whoever submitted won
         alert('You were correct!');
-      } else{
+      } else{ //emit to just who submitted it that they were wrong
         alert('You were wrong!');
       }
     }
