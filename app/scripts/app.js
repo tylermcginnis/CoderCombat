@@ -22,5 +22,5 @@ angular.module('CoderCombatApp', ['CoderCombatApp.controllers', 'CoderCombatApp.
   }]);;
 
 //Todo Friday
-//Figure out what to do when someone 'disconnects' from the room
 //Figure out how to evaluate code and declare a winner (When you get to this break it up more)
+//Figure out what to do when someone 'disconnects' from the room
