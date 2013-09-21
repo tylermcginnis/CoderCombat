@@ -1,4 +1,10 @@
-angular.module('CoderCombatApp', ['CoderCombatApp.controllers', 'CoderCombatApp.directives', 'CoderCombatApp.services', '$strap.directives'])
+angular.module('CoderCombatApp', 
+  [
+    'CoderCombatApp.controllers', 
+    'CoderCombatApp.directives', 
+    'CoderCombatApp.services', 
+    '$strap.directives'
+  ])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/', {

@@ -33,7 +33,6 @@ angular.module('CoderCombatApp.controllers', [])
           keyboard: false,
           scope: $scope
         });
-        socket.emit('connection');
       });
       socket.on('modalStart', function(){
         $modal({

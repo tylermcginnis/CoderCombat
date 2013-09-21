@@ -55,6 +55,7 @@ var room;
 var initcount = 0;
 var roomcount = 0;
 var roomList = {};
+var numOfUndefines = 0; //Number of rooms with a disconnected user
 
 io.sockets.on('connection', function (socket) {
   socket.on('initialEditor', function(editorText){
@@ -70,17 +71,37 @@ io.sockets.on('connection', function (socket) {
     io.sockets.in(room).emit('updateQuestion',questionObj);
   });
 
+  console.log('NUM of Undefines', numOfUndefines);
   initcount += 1;
-  if (initcount % 2 === 1) {   
-    roomcount += 1;
-    room = roomcount.toString();
-    roomList[room] = {user1: socket.id};
-  } else {
-    roomList[room].user2 = socket.id
+  if(numOfUndefines === 0){
+    if(initcount % 2 === 1){
+      roomcount += 1;
+      room = roomcount.toString();
+      roomList[room] = {user1: socket.id};
+    } else {
+      roomList[room].user2 = socket.id
+    }
+    socket.join(room);
+    socket['room'] = room;
+    socket.in(room).emit('join', room);
+  } else if(numOfUndefines > 0 && numOfUndefines % 2 === 1){
+    var disconnectedRoom;
+    for(var property in roomList){
+      if(roomList[property].user1 === 0){
+        disconnectedRoom = property;
+        roomList[disconnectedRoom].user1 = socket.id;
+        socket.join(disconnectedRoom);
+        socket.broadcast.emit('modalEnd');
+      } else if(roomList[property].user2 === 0){
+        disconnectedRoom = property;
+        roomList[disconnectedRoom].user2 = socket.id;
+        socket.join(disconnectedRoom);
+        socket.broadcast.emit('modalEnd');
+      }
+    }
+  } else if(numOfUndefines > 0 && numOfUndefines % 2 === 0){
+
   }
-  socket.join(room);
-  socket['room'] = room;
-  socket.in(room).emit('join', room);
 
   socket.on('init', function (room) {
     if (initcount % 2 === 0){
@@ -97,26 +118,28 @@ io.sockets.on('connection', function (socket) {
   socket.on('disconnect', function () {
     console.log('Disconnected');
     var disconUser = socket.id;
-    var dec = true;
-
-    //Going to leave this for now. This loop makes it so if a user disconnects,
-    //their userid goes undefined. I was thinking maybe theres a way to tell if 
-    //we need to decrement or not based off this value. Can't get it to work though. 
+    //for loop sets the disconnected user to undefined in roomList
     for (var prop in roomList) {//might not be neccessary
         if (roomList[prop].user1 === disconUser){
-          roomList[prop].user1 = undefined;
+          roomList[prop].user1 = 0;
+          numOfUndefines++;
         } else if(roomList[prop].user2 === disconUser){
-          roomList[prop].user2 = undefined
+          roomList[prop].user2 = 0
+          numOfUndefines++;
         }
 
-        if(roomList[prop].user1 === undefined && roomList[prop].user2 === undefined){
+        if(roomList[prop].user1 === 0 && roomList[prop].user2 === 0){
+          numOfUndefines -= 2;
           delete roomList[prop];
         }
     }
-    
-    initcount -=1; //if two people disconnect, the % math breaks
+    console.log("ROOM LIST", roomList);
+    initcount -=1;
     socket.broadcast.to(room).emit('oppDisconnect');
   });
 });
 
 server.listen(3000);
+
+//see if I can just get the roomName and socketIO room of the person who
+//disconnected then put the new person in that same room. 
