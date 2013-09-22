@@ -63,9 +63,13 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.to(room).emit('setInitialVals', editorText);
   });
   socket.on('editorChange', function(fullText){
+    console.log('socket being called on editorChange', socket);
+    console.log('room of that socket', socket.id);
     var room = socket['room'];
     socket.broadcast.to(room).emit('sendChange', fullText);
   });
+  //somehow when I'm altering the sockets earlier (adding one to another room), on editorChange the socket being called must not be the right one or the room
+  //isn't the right room. 
   socket.on('sendQuestion', function(questionObj){
     var room = socket['room'];
     io.sockets.in(room).emit('updateQuestion',questionObj);
@@ -163,7 +167,6 @@ io.sockets.on('connection', function (socket) {
               console.log('this should not log');
             }
           }
-          console.log('here roomNum needs to not be 2, it is ->', roomNum);
           if(roomList[roomNum].user1 === 0){
             secondDisconnectRoom = roomNum;
             secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
@@ -177,6 +180,8 @@ io.sockets.on('connection', function (socket) {
         }
 
         var socketNew = secondDisconnectPartner;
+        var socketNews = io.sockets.clients('2');
+        console.log('new socket', socketNews[0].room);
         if(socketNew){
           if(firstDisconnectedUser === 'user1'){
             roomList[firstDisconnectedRoom].user1 = secondDisconnectPartner.id;
@@ -190,6 +195,8 @@ io.sockets.on('connection', function (socket) {
 
           socketNew.leave(secondDisconnectRoom);
           socketNew.join(firstDisconnectedRoom);
+          socketNew.room = '1';
+          console.log('after change',socketNew.room);
           numOfUndefines && (numOfUndefines -= 2);
           socket.broadcast.emit('modalEnd');
           console.log("After all is done, we want the real room list to mimic this- ", roomList);
