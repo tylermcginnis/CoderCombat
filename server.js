@@ -81,6 +81,7 @@ io.sockets.on('connection', function (socket) {
       roomList[room].user2 = socket.id
     }
     socket.join(room);
+    console.log('Up Toptop1',io.sockets.clients( disconnectedRoom));
     socket['room'] = room;
     socket.in(room).emit('join', room);
   } else if(numOfUndefines > 0 && numOfUndefines % 2 === 1){
@@ -90,12 +91,14 @@ io.sockets.on('connection', function (socket) {
         disconnectedRoom = property;
         roomList[disconnectedRoom].user1 = socket.id;
         socket.join(disconnectedRoom);
+        console.log('Up Top1',io.sockets.clients( disconnectedRoom));
         numOfUndefines--;
         socket.broadcast.emit('modalEnd');
       } else if(roomList[property].user2 === 0){
         disconnectedRoom = property;
         roomList[disconnectedRoom].user2 = socket.id;
         socket.join(disconnectedRoom);
+        console.log('Up Top1',io.sockets.clients( disconnectedRoom));
         numOfUndefines--;
         socket.broadcast.emit('modalEnd');
       }
@@ -117,7 +120,7 @@ io.sockets.on('connection', function (socket) {
     console.log('Disconnected');
     initcount -=1;
     var disconUser = socket.id;
-    //for loop sets the disconnected user to undefined in roomList
+    //for loop sets the disconnected user to 0 in roomList
     for (var prop in roomList) {
         if(roomList[prop].user1 === disconUser){
           roomList[prop].user1 = 0;
@@ -167,14 +170,16 @@ io.sockets.on('connection', function (socket) {
         }
         var socketNew = secondDisconnectPartner;
         if(socketNew){
-          socketNew.join(firstDisconnectedRoom);
           if(firstDisconnectedUser === 'user1'){
             roomList[firstDisconnectedRoom].user1 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
           } else if(firstDisconnectedUser === 'user2'){
-            roomList[firstDisconnectedRoom].user1 = secondDisconnectPartner.id;
+            roomList[firstDisconnectedRoom].user2 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
           }
+          socketNew.join(firstDisconnectedRoom);
+          console.log('HERE',io.sockets.clients(firstDisconnectedRoom));
+          console.log("ROOM LIST", roomList);
           numOfUndefines && (numOfUndefines -= 2);
           socket.broadcast.emit('modalEnd');
         }
