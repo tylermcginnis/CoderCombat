@@ -71,7 +71,6 @@ io.sockets.on('connection', function (socket) {
     io.sockets.in(room).emit('updateQuestion',questionObj);
   });
 
-  console.log('NUM of Undefines', numOfUndefines);
   initcount += 1;
   if(numOfUndefines === 0){
     if(initcount % 2 === 1){
@@ -112,75 +111,68 @@ io.sockets.on('connection', function (socket) {
       }
   });
 
-  //SOLUTION: If the newly disconnected user is the only undefined user, decrement.
   socket.on('disconnect', function () {
     console.log('Disconnected');
+    initcount -=1;
     var disconUser = socket.id;
     //for loop sets the disconnected user to undefined in roomList
-    for (var prop in roomList) {//might not be neccessary
+    for (var prop in roomList) {
         if(roomList[prop].user1 === disconUser){
           roomList[prop].user1 = 0;
           room = prop;
+          numOfUndefines++;
         } else if(roomList[prop].user2 === disconUser){
           roomList[prop].user2 = 0
           room = prop;
+          numOfUndefines++;
         }
-
         if(roomList[prop].user1 === 0 && roomList[prop].user2 === 0){
           numOfUndefines -= 2;
           delete roomList[prop];
         }
     }
 
-    numOfUndefines++;
-   
-    console.log("ROOM LIST", roomList);
-    initcount -=1;
     socket.broadcast.to(room).emit('oppDisconnect');
 
-        console.log('Num of Undefines', numOfUndefines);
-      if(numOfUndefines % 2 === 0 && numOfUndefines > 0){
-          var firstDisconnectedRoom;
-          var firstDisconnectedUser;
-          var secondDisconnectPartner;
-          var secondDisconnectRoom;
-        setTimeout(function(){
-          var cont = true;
-          for(var property in roomList){
-            while(cont){
-              if(roomList[property].user1 === 0){
-                firstDisconnectedRoom = property;
-                firstdisconnectedUser = 'user1';
-                cont = false;
-                continue;
-              } else if(roomList[property].user2 === 0){
-                firstDisconnectedRoom = property;
-                firstDisconnectedUser = 'user2';
-                cont = false;
-                continue;
-              }
-            }
-
+    if(numOfUndefines % 2 === 0 && numOfUndefines > 0){
+      var firstDisconnectedRoom;
+      var firstDisconnectedUser;
+      var secondDisconnectPartner;
+      var secondDisconnectRoom;
+      setTimeout(function(){
+        var cont = true;
+        for(var property in roomList){
+          while(cont){
             if(roomList[property].user1 === 0){
-              secondDisconnectRoom = property;
-              secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
-              console.log('partner', secondDisconnectPartner);
+              firstDisconnectedRoom = property;
+              firstdisconnectedUser = 'user1';
+              cont = false;
+              continue;
             } else if(roomList[property].user2 === 0){
-              secondDisconnectRoom = property;
-              secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
-              console.log('partner', secondDisconnectPartner);
+              firstDisconnectedRoom = property;
+              firstDisconnectedUser = 'user2';
+              cont = false;
+              continue;
             }
           }
-        var socketNew = secondDisconnectPartner;
-        socketNew.join(firstDisconnectedRoom);
-        socket.broadcast.emit('modalEnd');
-        }, 2000);
-      }
 
+          if(roomList[property].user1 === 0){
+            secondDisconnectRoom = property;
+            secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
+          } else if(roomList[property].user2 === 0){
+            secondDisconnectRoom = property;
+            secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
+          }
+        }
+        var socketNew = secondDisconnectPartner;
+        if(socketNew){
+          socketNew.join(firstDisconnectedRoom);
+          socket.broadcast.emit('modalEnd');
+        }
+        numOfUndefines -=2;
+      }, 2000);
+    }
   });
 });
 
 server.listen(3000);
-
-//see if I can just get the roomName and socketIO room of the person who
-//disconnected then put the new person in that same room. 
