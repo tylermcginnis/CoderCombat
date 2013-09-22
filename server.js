@@ -63,13 +63,10 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.to(room).emit('setInitialVals', editorText);
   });
   socket.on('editorChange', function(fullText){
-    console.log('socket being called on editorChange', socket);
-    console.log('room of that socket', socket.id);
     var room = socket['room'];
     socket.broadcast.to(room).emit('sendChange', fullText);
   });
-  //somehow when I'm altering the sockets earlier (adding one to another room), on editorChange the socket being called must not be the right one or the room
-  //isn't the right room. 
+
   socket.on('sendQuestion', function(questionObj){
     var room = socket['room'];
     io.sockets.in(room).emit('updateQuestion',questionObj);
@@ -141,7 +138,6 @@ io.sockets.on('connection', function (socket) {
 
     socket.broadcast.to(room).emit('oppDisconnect');
 
-     //debug starts below
     if(numOfUndefines % 2 === 0 && numOfUndefines > 0){
       var firstDisconnectedRoom;
       var firstDisconnectedUser;
@@ -149,33 +145,24 @@ io.sockets.on('connection', function (socket) {
       var secondDisconnectRoom;
       setTimeout(function(){
         var cont = true;
-        console.log("At this moment RoomList needs to be exactly the same as the real rooms");
-        console.log("Original ROOMLIST - ", roomList);
-        console.log('Real Rooms - ' , io.sockets.manager.rooms);
         for(var roomNum in roomList){
-          console.log("RoomNum is the prob. Here it is, ", roomNum);
           while(cont){
             if(roomList[roomNum].user1 === 0){
               firstDisconnectedRoom = roomNum;
               firstDisconnectedUser = 'user1';
               cont = false;
-              console.log('this should be 1 - first disconnect room', firstDisconnectedRoom);
             } else if(roomList[roomNum].user2 === 0){
               firstDisconnectedRoom = roomNum;
               firstDisconnectedUser = 'user2';
               cont = false;
-              console.log('this should not log');
             }
           }
           if(roomList[roomNum].user1 === 0){
             secondDisconnectRoom = roomNum;
             secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
-            console.log('this is being saved into secondDisconnectPartner and eventually to socketNew', secondDisconnectPartner);
-            console.log('this should be 2 - secondDisconnectRoom', secondDisconnectRoom);
           } else if(roomList[roomNum].user2 === 0){
             secondDisconnectRoom = roomNum;
             secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
-            console.log('this should not log. below');
           }
         }
 
@@ -196,11 +183,8 @@ io.sockets.on('connection', function (socket) {
           socketNew.leave(secondDisconnectRoom);
           socketNew.join(firstDisconnectedRoom);
           socketNew.room = firstDisconnectedRoom;
-          console.log('after change',socketNew.room);
           numOfUndefines && (numOfUndefines -= 2);
           socket.broadcast.emit('modalEnd');
-          console.log("After all is done, we want the real room list to mimic this- ", roomList);
-          console.log('Real Rooms after - ' , io.sockets.manager.rooms)
         }
       }, 2000);
     }
