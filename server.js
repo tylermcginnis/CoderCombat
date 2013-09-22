@@ -55,7 +55,7 @@ var room;
 var initcount = 0;
 var roomcount = 0;
 var roomList = {};
-var numOfUndefines = 0; //Number of rooms with a disconnected user
+var numOfUndefines = 0;
 
 io.sockets.on('connection', function (socket) {
   socket.on('initialEditor', function(editorText){
@@ -107,7 +107,6 @@ io.sockets.on('connection', function (socket) {
     if (initcount % 2 === 0){
         console.log('Initialize New Match in room ' , room);
         socket.broadcast.emit('modalEnd');   
-    
       } else{
           console.log("Waiting for an opponent in room ", room);
           socket.emit('modalStart');
@@ -167,8 +166,6 @@ io.sockets.on('connection', function (socket) {
         }
 
         var socketNew = secondDisconnectPartner;
-        var socketNews = io.sockets.clients('2');
-        console.log('new socket', socketNews[0].room);
         if(socketNew){
           if(firstDisconnectedUser === 'user1'){
             roomList[firstDisconnectedRoom].user1 = secondDisconnectPartner.id;
