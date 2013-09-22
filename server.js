@@ -100,15 +100,6 @@ io.sockets.on('connection', function (socket) {
       }
     }
   } 
-  // else if(numOfUndefines > 0 && numOfUndefines % 2 === 0){
-
-  // }
-
-  setInterval(function(){
-    if(numOfUndefines > 0 && numOfUndefines % 2 === 0){
-      console.log('here');
-    }
-  }, 2000);
 
   socket.on('init', function (room) {
     if (initcount % 2 === 0){
@@ -127,14 +118,11 @@ io.sockets.on('connection', function (socket) {
     var disconUser = socket.id;
     //for loop sets the disconnected user to undefined in roomList
     for (var prop in roomList) {//might not be neccessary
-      console.log('Num of Undefines', numOfUndefines);
-        if (roomList[prop].user1 === disconUser){
+        if(roomList[prop].user1 === disconUser){
           roomList[prop].user1 = 0;
-          numOfUndefines++;
           room = prop;
         } else if(roomList[prop].user2 === disconUser){
           roomList[prop].user2 = 0
-          numOfUndefines++;
           room = prop;
         }
 
@@ -143,9 +131,52 @@ io.sockets.on('connection', function (socket) {
           delete roomList[prop];
         }
     }
+
+    numOfUndefines++;
+   
     console.log("ROOM LIST", roomList);
     initcount -=1;
     socket.broadcast.to(room).emit('oppDisconnect');
+
+        console.log('Num of Undefines', numOfUndefines);
+      if(numOfUndefines % 2 === 0 && numOfUndefines > 0){
+          var firstDisconnectedRoom;
+          var firstDisconnectedUser;
+          var secondDisconnectPartner;
+          var secondDisconnectRoom;
+        setTimeout(function(){
+          var cont = true;
+          for(var property in roomList){
+            while(cont){
+              if(roomList[property].user1 === 0){
+                firstDisconnectedRoom = property;
+                firstdisconnectedUser = 'user1';
+                cont = false;
+                continue;
+              } else if(roomList[property].user2 === 0){
+                firstDisconnectedRoom = property;
+                firstDisconnectedUser = 'user2';
+                cont = false;
+                continue;
+              }
+            }
+
+            if(roomList[property].user1 === 0){
+              secondDisconnectRoom = property;
+              secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
+              console.log('partner', secondDisconnectPartner);
+            } else if(roomList[property].user2 === 0){
+              secondDisconnectRoom = property;
+              secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
+              console.log('partner', secondDisconnectPartner);
+            }
+          }
+        var socketNew = secondDisconnectPartner;
+        socketNew.join(firstDisconnectedRoom);
+        socket.broadcast.emit('modalEnd');
+        }, 2000);
+      }
+
   });
 });
 
