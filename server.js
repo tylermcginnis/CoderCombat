@@ -81,7 +81,6 @@ io.sockets.on('connection', function (socket) {
       roomList[room].user2 = socket.id
     }
     socket.join(room);
-    console.log('Up Toptop1',io.sockets.clients( disconnectedRoom));
     socket['room'] = room;
     socket.in(room).emit('join', room);
   } else if(numOfUndefines > 0 && numOfUndefines % 2 === 1){
@@ -91,14 +90,12 @@ io.sockets.on('connection', function (socket) {
         disconnectedRoom = property;
         roomList[disconnectedRoom].user1 = socket.id;
         socket.join(disconnectedRoom);
-        console.log('Up Top1',io.sockets.clients( disconnectedRoom));
         numOfUndefines--;
         socket.broadcast.emit('modalEnd');
       } else if(roomList[property].user2 === 0){
         disconnectedRoom = property;
         roomList[disconnectedRoom].user2 = socket.id;
         socket.join(disconnectedRoom);
-        console.log('Up Top1',io.sockets.clients( disconnectedRoom));
         numOfUndefines--;
         socket.broadcast.emit('modalEnd');
       }
@@ -134,10 +131,13 @@ io.sockets.on('connection', function (socket) {
         if(roomList[prop].user1 === 0 && roomList[prop].user2 === 0){
           numOfUndefines -= 2;
           delete roomList[prop];
+          roomcount--;
         }
     }
 
     socket.broadcast.to(room).emit('oppDisconnect');
+
+     //debug starts below
     if(numOfUndefines % 2 === 0 && numOfUndefines > 0){
       var firstDisconnectedRoom;
       var firstDisconnectedUser;
@@ -145,45 +145,57 @@ io.sockets.on('connection', function (socket) {
       var secondDisconnectRoom;
       setTimeout(function(){
         var cont = true;
-        for(var property in roomList){
+        console.log("At this moment RoomList needs to be exactly the same as the real rooms");
+        console.log("Original ROOMLIST - ", roomList);
+        console.log('Real Rooms - ' , io.sockets.manager.rooms);
+        for(var roomNum in roomList){
+          console.log("RoomNum is the prob. Here it is, ", roomNum);
           while(cont){
-            if(roomList[property].user1 === 0){
-              firstDisconnectedRoom = property;
+            if(roomList[roomNum].user1 === 0){
+              firstDisconnectedRoom = roomNum;
               firstDisconnectedUser = 'user1';
               cont = false;
-              continue;
-            } else if(roomList[property].user2 === 0){
-              firstDisconnectedRoom = property;
+              console.log('this should be 1 - first disconnect room', firstDisconnectedRoom);
+            } else if(roomList[roomNum].user2 === 0){
+              firstDisconnectedRoom = roomNum;
               firstDisconnectedUser = 'user2';
               cont = false;
-              continue;
+              console.log('this should not log');
             }
           }
-
-          if(roomList[property].user1 === 0){
-            secondDisconnectRoom = property;
+          console.log('here roomNum needs to not be 2, it is ->', roomNum);
+          if(roomList[roomNum].user1 === 0){
+            secondDisconnectRoom = roomNum;
             secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
-          } else if(roomList[property].user2 === 0){
-            secondDisconnectRoom = property;
+            console.log('this is being saved into secondDisconnectPartner and eventually to socketNew', secondDisconnectPartner);
+            console.log('this should be 2 - secondDisconnectRoom', secondDisconnectRoom);
+          } else if(roomList[roomNum].user2 === 0){
+            secondDisconnectRoom = roomNum;
             secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
+            console.log('this should not log. below');
           }
         }
+
         var socketNew = secondDisconnectPartner;
         if(socketNew){
           if(firstDisconnectedUser === 'user1'){
             roomList[firstDisconnectedRoom].user1 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
+            roomcount--;
           } else if(firstDisconnectedUser === 'user2'){
             roomList[firstDisconnectedRoom].user2 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
+            roomcount--;
           }
+
+          socketNew.leave(secondDisconnectRoom);
           socketNew.join(firstDisconnectedRoom);
-          console.log('HERE',io.sockets.clients(firstDisconnectedRoom));
-          console.log("ROOM LIST", roomList);
           numOfUndefines && (numOfUndefines -= 2);
           socket.broadcast.emit('modalEnd');
+          console.log("After all is done, we want the real room list to mimic this- ", roomList);
+          console.log('Real Rooms after - ' , io.sockets.manager.rooms)
         }
-      }, 1000);
+      }, 2000);
     }
   });
 });
