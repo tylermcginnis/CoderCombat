@@ -195,7 +195,7 @@ io.sockets.on('connection', function (socket) {
 
           socketNew.leave(secondDisconnectRoom);
           socketNew.join(firstDisconnectedRoom);
-          socketNew.room = '1';
+          socketNew.room = firstDisconnectedRoom;
           console.log('after change',socketNew.room);
           numOfUndefines && (numOfUndefines -= 2);
           socket.broadcast.emit('modalEnd');
