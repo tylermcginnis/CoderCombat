@@ -73,7 +73,7 @@ angular.module('CoderCombatApp.controllers', [])
 
             //tell the opponent they lost.
             socket.emit('youLost');
-        } else{ //emit to just who submitted it that they were wrong
+        } else { 
           alert('Looks like you didn\'t have the correct answer. Try again.');
         }
       }
