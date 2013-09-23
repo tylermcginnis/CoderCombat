@@ -115,6 +115,11 @@ io.sockets.on('connection', function (socket) {
       }
   });
 
+  socket.on('youLost', function(room){
+    room = socket['room'];
+    socket.broadcast.to(room).emit('loserModal');
+  });
+
   socket.on('disconnect', function (){
     console.log('Disconnected');
     initcount -=1;

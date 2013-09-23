@@ -47,6 +47,13 @@ angular.module('CoderCombatApp.controllers', [])
         }
         socket.emit('sendQuestion', questionObj);
       });
+      socket.on('loserModal', function(room){
+        $modal({
+          template: '../../views/pairing-modal.html',
+          keyboard: false,
+          scope: $scope
+        });
+      })
 
       $scope.evaluateCode = function(){
         var editor = ace.edit('leftEditor');
@@ -57,9 +64,17 @@ angular.module('CoderCombatApp.controllers', [])
         userAnswer = userAnswer.join("");
         var result = eval(userAnswer);
         if(result === answer){ //emit to both parties that whoever submitted won
-          alert('You were correct!');
+           //person who submitted it, congratuations modal
+            $modal({
+              template: '../../views/pairing-modal.html',
+              keyboard: false,
+              scope: $scope
+            }); 
+
+            //tell the opponent they lost.
+            socket.emit('youLost');
         } else{ //emit to just who submitted it that they were wrong
-          alert('You were wrong!');
+          alert('Looks like you didn\'t have the correct answer. Try again.');
         }
       }
  }]);
