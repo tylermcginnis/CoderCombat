@@ -15,11 +15,11 @@ var db = mongoose.createConnection("localhost", "codercombat");
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.on('disconnected', function(){
-  // console.log("Disconnected from DB");
+  console.log("Disconnected from DB");
 });
 
 db.once('open', function(){
-  // console.log('Connection is Open');
+  console.log('Connection is Open');
 });
 
 var questionschema = require("./app/schemas/questionSchema.js");
@@ -93,34 +93,31 @@ io.sockets.on('connection', function (socket) {
         socket.join(disconnectedRoom);
         numOfUndefines--;
         numOfUndefines && (numOfUndefines = 0);
-        console.log('num of und', numOfUndefines);
         socket.broadcast.emit('modalEnd');
       } else if(roomList[property].user2 === 0){
-        disconnectedRoom = property;
-        roomList[disconnectedRoom].user2 = socket.id;
-        socket.join(disconnectedRoom);
-        numOfUndefines--;
-        numOfUndefines && (numOfUndefines = 0);
-        console.log('num of und', numOfUndefines);
-        socket.broadcast.emit('modalEnd');
+          disconnectedRoom = property;
+          roomList[disconnectedRoom].user2 = socket.id;
+          socket.join(disconnectedRoom);
+          numOfUndefines--;
+          numOfUndefines && (numOfUndefines = 0);
+          socket.broadcast.emit('modalEnd');
       }
     }
   } 
 
   socket.on('init', function (room) {
     if (initcount % 2 === 0){
-        // console.log('Initialize New Match in room ' , room);
+        console.log('Initialize New Match in room ' , room);
         socket.broadcast.emit('modalEnd');   
       } else{
-          // console.log("Waiting for an opponent in room ", room);
+          console.log("Waiting for an opponent in room ", room);
           socket.emit('modalStart');
       }
   });
 
-  socket.on('disconnect', function () {
-    // console.log('Disconnected');
+  socket.on('disconnect', function (){
+    console.log('Disconnected');
     initcount -=1;
-    console.log('init count 125',initcount);
     var disconUser = socket.id;
     //for loop sets the disconnected user to 0 in roomList
     for (var prop in roomList) {
@@ -128,20 +125,16 @@ io.sockets.on('connection', function (socket) {
           roomList[prop].user1 = 0;
           room = prop;
           numOfUndefines++;
-          console.log('num of und', numOfUndefines);
         } else if(roomList[prop].user2 === disconUser){
           roomList[prop].user2 = 0
           room = prop;
           numOfUndefines++;
-          console.log('num of undefined', numOfUndefines);
         }
         if(roomList[prop].user1 === 0 && roomList[prop].user2 === 0){
           numOfUndefines -= 2
           numOfUndefines && (numOfUndefines = 0);
-          console.log('num of undefined', numOfUndefines);
           delete roomList[prop];
           roomcount--;
-          console.log('roomcount', roomcount);
         }
     }
 
@@ -181,19 +174,16 @@ io.sockets.on('connection', function (socket) {
             roomList[firstDisconnectedRoom].user1 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
             roomcount--;
-            console.log('roomcount', roomcount);
           } else if(firstDisconnectedUser === 'user2'){
             roomList[firstDisconnectedRoom].user2 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
             roomcount--;
-            console.log('roomcount', roomcount);
           }
 
           socketNew.leave(secondDisconnectRoom);
           socketNew.join(firstDisconnectedRoom);
           socketNew.room = firstDisconnectedRoom;
           numOfUndefines && (numOfUndefines -= 2);
-          console.log('num of und', numOfUndefines);
           socket.broadcast.emit('modalEnd');
         }
       }, 2000);
@@ -205,59 +195,43 @@ io.sockets.on('connection', function (socket) {
     } else if(roomList[socket['room']]){
       if(Object.keys(roomList[socket['room']]).length === 1 && numOfUndefines === 1){
         numOfUndefines = 0
-        console.log('num of und', numOfUndefines);
-        // delete roomList[socket['room']];
       }
     }
 
     //if player is looking for a partner when someone quits, pair new gamer with old widow
     if(initcount % 2 === 0 && numOfUndefines === 1){
-        var widowRoom;
-        var widower;
-        var looker;
-        var go = true;
-        var lookerRoom;
+      var widowRoom;
+      var widower;
+      var looker;
+      var go = true;
+      var lookerRoom;
       for(var roomNum in roomList){
         while(go){
-            if(roomList[roomNum].user1 === 0){
-              widowRoom = roomNum;
-              widower = 'user1';
-              go = false;
-            } else if(roomList[roomNum].user2 === 0){
-              widowRoom = roomNum;
-              widower = 'user2';
-              go = false;
-            }
+          if(roomList[roomNum].user1 === 0){
+            widowRoom = roomNum;
+            widower = 'user1';
+            go = false;
+          } else if(roomList[roomNum].user2 === 0){
+            widowRoom = roomNum;
+            widower = 'user2';
+            go = false;
           }
+        }
 
         if(roomList[roomNum]){
-          console.log('room list at room num',roomList[roomNum]);
-          console.log('roomlist', roomList);
-          console.log('real rooms', io.sockets.manager.rooms);
           if(Object.keys(roomList[roomNum]).length === 1){
             lookerRoom = roomNum;
             looker = io.sockets.clients(lookerRoom)[0];
-            console.log('looker', looker);
             looker.leave(lookerRoom);
             looker.join(widowRoom);
-            console.log('widowroom', widowRoom);
             looker.room = widowRoom;
-            console.log('looker.room', looker.room);
             numOfUndefines && (numOfUndefines--);
-            console.log('numer of undefined', numOfUndefines);
-            console.log("NINT count", initcount);
             setTimeout(function(){io.sockets.in(widowRoom).emit('modalEnd')}, 3000);
             break;
           }
         }
       }
     }
-
-
-    // console.log('all official rooms AFTER', io.sockets.manager.rooms);
-    // console.log('master roomList[socket] AFTER', roomList);
-    // console.log('here', roomList[socket['room']]);
-
   });
 });
 
