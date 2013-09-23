@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
 var questionSchema = new mongoose.Schema({
-    title: String,
-    question: String,
+    answer: String,
     parameter: String,
-    answer: String
+    question: String,
+    title: String
 });
 
 module.exports = mongoose.model('questions', questionSchema);
