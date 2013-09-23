@@ -28,7 +28,7 @@ app.get('/', function(req, res){
   res.sendfile(__dirname + '/app/index.html');
 });
 
-app.get('/getQuestion', function(req, res){ //refactor to send back random question
+app.get('/getQuestion', function(req, res){
   var collectionName = 'questions';
   var processor = db.model('questions', questionschema.questionSchema, collectionName, false);
   processor.find().execFind(function(err, dataFromDb){
@@ -79,7 +79,7 @@ io.sockets.on('connection', function (socket) {
       room = roomcount.toString();
       roomList[room] = {user1: socket.id};
     } else {
-      roomList[room].user2 = socket.id
+      roomList[room].user2 = socket.id;
     }
     socket.join(room);
     socket['room'] = room;
@@ -185,6 +185,12 @@ io.sockets.on('connection', function (socket) {
         }
       }, 2000);
     }
+
+    //guard on if a player disconnects before getting a partner
+    if(Object.keys(roomList[socket['room']]).length === 1){
+      numOfUndefines = 0;
+    }
+    
   });
 });
 
