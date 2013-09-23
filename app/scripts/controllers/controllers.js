@@ -49,7 +49,7 @@ angular.module('CoderCombatApp.controllers', [])
       });
       socket.on('loserModal', function(room){
         $modal({
-          template: '../../views/pairing-modal.html',
+          template: '../../views/loser-modal.html',
           keyboard: false,
           scope: $scope
         });
@@ -63,10 +63,10 @@ angular.module('CoderCombatApp.controllers', [])
         userAnswer.push('(' + "'" + parameter + "'" + ')'+ ')');
         userAnswer = userAnswer.join("");
         var result = eval(userAnswer);
-        if(result === answer){ //emit to both parties that whoever submitted won
+        if(result === answer){
            //person who submitted it, congratuations modal
             $modal({
-              template: '../../views/pairing-modal.html',
+              template: '../../views/congratulations-modal.html',
               keyboard: false,
               scope: $scope
             }); 
