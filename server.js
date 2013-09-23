@@ -187,10 +187,15 @@ io.sockets.on('connection', function (socket) {
     }
 
     //guard on if a player disconnects before getting a partner
-    if(Object.keys(roomList[socket['room']]).length === 1){
+    if(initcount === 0){
       numOfUndefines = 0;
+    } else if(roomList[socket['room']]){
+      if(Object.keys(roomList[socket['room']]).length === 1){
+        numOfUndefines = 0
+        // delete roomList[socket['room']];
+      }
     }
-    
+
   });
 });
 
