@@ -238,3 +238,44 @@ h3 #modalLogo{
     padding-bottom: 10px;
 }
 
+@media screen and (max-width: 1200px) {
+    body{
+        border: 5px solid green;
+    }
+    #editor_submit-container {
+        width: 55%;
+    }
+    #opponent-editor {
+        width: 42.5%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    body{
+        border: 5px solid red;
+    }
+    #editor_submit-container {
+        width: 50%;
+    }
+    #opponent-editor {
+        width: 47.5%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    body{
+        border: 5px solid yellow;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    body{
+        border: 5px solid black;
+    }
+}
+
+@media screen and (max-width: 200px) {
+    body{
+        border: 5px solid orange;
+    }
+}
