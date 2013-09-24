@@ -58,20 +58,8 @@ var roomList = {};
 var numOfUndefines = 0;
 
 io.sockets.on('connection', function (socket) {
-  socket.on('initialEditor', function(editorText){
-    var room = socket['room'];
-    socket.broadcast.to(room).emit('setInitialVals', editorText);
-  });
-  socket.on('editorChange', function(fullText){
-    var room = socket['room'];
-    socket.broadcast.to(room).emit('sendChange', fullText);
-  });
-
-  socket.on('sendQuestion', function(questionObj){
-    var room = socket['room'];
-    io.sockets.in(room).emit('updateQuestion',questionObj);
-  });
-
+  console.log('CONNECTED');
+  
   initcount += 1;
   if(numOfUndefines === 0){
     if(initcount % 2 === 1){
@@ -92,26 +80,55 @@ io.sockets.on('connection', function (socket) {
         roomList[disconnectedRoom].user1 = socket.id;
         socket.join(disconnectedRoom);
         numOfUndefines--;
-        numOfUndefines && (numOfUndefines = 0);
+        console.log('numOfUndefines - 95',numOfUndefines);
+        if(numOfUndefines < 0){
+          numOfUndefines = 0;
+        }
+        console.log('numOfUndefines - 99',numOfUndefines);
         socket.broadcast.emit('modalEnd');
       } else if(roomList[property].user2 === 0){
           disconnectedRoom = property;
           roomList[disconnectedRoom].user2 = socket.id;
           socket.join(disconnectedRoom);
           numOfUndefines--;
-          numOfUndefines && (numOfUndefines = 0);
+          console.log('numOfUndefines - 104',numOfUndefines);
+          if(numOfUndefines < 0){
+            numOfUndefines = 0;
+          }
+          console.log('numOfUndefines - 108',numOfUndefines);
           socket.broadcast.emit('modalEnd');
       }
     }
+      console.log('Room list -114', roomList);
+      console.log('real rooms 115', io.sockets.manager.rooms);
   } 
 
+  socket.on('initialEditor', function(editorText){
+    var room = socket['room'];
+    socket.broadcast.to(room).emit('setInitialVals', editorText);
+  });
+  socket.on('editorChange', function(fullText){
+    var room = socket['room'];
+    socket.broadcast.to(room).emit('sendChange', fullText);
+  });
+
+  socket.on('sendQuestion', function(questionObj){
+    var room = socket['room'];
+    io.sockets.in(room).emit('updateQuestion',questionObj);
+  });
+
   socket.on('init', function (room) {
+    console.log('This One yaa 119', initcount);
     if (initcount % 2 === 0){
         console.log('Initialize New Match in room ' , room);
         socket.broadcast.emit('modalEnd');   
-      } else{
+                        console.log('Room list -124', roomList);
+            console.log('real rooms 125', io.sockets.manager.rooms);
+      } else if(initcount % 2 === 1){
           console.log("Waiting for an opponent in room ", room);
           socket.emit('modalStart');
+                          console.log('Room list -129', roomList);
+            console.log('real rooms 130', io.sockets.manager.rooms);
       }
   });
 
@@ -130,21 +147,28 @@ io.sockets.on('connection', function (socket) {
           roomList[prop].user1 = 0;
           room = prop;
           numOfUndefines++;
+          console.log('numOfUndefines - 141',numOfUndefines);
         } else if(roomList[prop].user2 === disconUser){
           roomList[prop].user2 = 0
           room = prop;
           numOfUndefines++;
+          console.log('numOfUndefines - 146',numOfUndefines);
         }
         if(roomList[prop].user1 === 0 && roomList[prop].user2 === 0){
           numOfUndefines -= 2
-          numOfUndefines && (numOfUndefines = 0);
+          if(numOfUndefines < 0){
+            numOfUndefines = 0;
+          }
+          console.log('numOfUndefines - 153',numOfUndefines);
           delete roomList[prop];
           roomcount--;
         }
     }
-
+                console.log('Room list -158', roomList);
+            console.log('real rooms 159', io.sockets.manager.rooms);
     socket.broadcast.to(room).emit('oppDisconnect');
 
+    //two people with disconnected partners should be paired
     if(numOfUndefines % 2 === 0 && numOfUndefines > 0){
       var firstDisconnectedRoom;
       var firstDisconnectedUser;
@@ -188,7 +212,15 @@ io.sockets.on('connection', function (socket) {
           socketNew.leave(secondDisconnectRoom);
           socketNew.join(firstDisconnectedRoom);
           socketNew.room = firstDisconnectedRoom;
-          numOfUndefines && (numOfUndefines -= 2);
+          numOfUndefines -= 2;
+          if(numOfUndefines < 0){
+            numOfUndefines = 0;
+          }
+          console.log('numOfUndefines - 208',numOfUndefines);
+          // io.sockets.in(firstDisconnectedRoom).emit('updateQuestion',questionObj);
+          // io.sockets.in(firstDisconnectedRoom).emit('setInitialVals', editorText);
+                      console.log('Room list -212', roomList);
+            console.log('real rooms 213', io.sockets.manager.rooms);
           socket.broadcast.emit('modalEnd');
         }
       }, 2000);
@@ -197,19 +229,21 @@ io.sockets.on('connection', function (socket) {
     //guard on if a player disconnects before getting a partner
     if(initcount === 0){
       numOfUndefines = 0;
-    } else if(roomList[socket['room']]){
+    } 
+    if(roomList[socket['room']]){
       if(Object.keys(roomList[socket['room']]).length === 1 && numOfUndefines === 1){
         numOfUndefines = 0
       }
-    }
+    };
 
     //if player is looking for a partner when someone quits, pair new gamer with old widow
     if(initcount % 2 === 0 && numOfUndefines === 1){
       var widowRoom;
       var widower;
-      var looker;
+      var newPlayer;
       var go = true;
-      var lookerRoom;
+      setTimeout(function(){
+      var newPlayerRoom;
       for(var roomNum in roomList){
         while(go){
           if(roomList[roomNum].user1 === 0){
@@ -225,17 +259,32 @@ io.sockets.on('connection', function (socket) {
 
         if(roomList[roomNum]){
           if(Object.keys(roomList[roomNum]).length === 1){
-            lookerRoom = roomNum;
-            looker = io.sockets.clients(lookerRoom)[0];
-            looker.leave(lookerRoom);
-            looker.join(widowRoom);
-            looker.room = widowRoom;
+            newPlayerRoom = roomNum;
+            newPlayer = io.sockets.clients(newPlayerRoom)[0];
+            newPlayer.leave(newPlayerRoom);
+            newPlayer.join(widowRoom);
+            newPlayer.room = widowRoom;
+            //match roomList to new room
+            if(widower === 'user1'){
+                roomList[widowRoom].user1 = newPlayer.id;
+                delete roomList[newPlayerRoom];
+                roomcount--;
+              } else if(widower === 'user2'){
+                roomList[widowRoom].user2 = newPlayer.id;
+                delete roomList[newPlayerRoom];
+                roomcount--;
+              }
+
             numOfUndefines && (numOfUndefines--);
-            setTimeout(function(){io.sockets.in(widowRoom).emit('modalEnd')}, 3000);
+            console.log('numOfUndefines - 255',numOfUndefines);
+            io.sockets.in(widowRoom).emit('modalEnd');
+            console.log('Room list -268', roomList);
+            console.log('real rooms 269', io.sockets.manager.rooms);
             break;
           }
         }
-      }
+       }
+      }, 3000);
     }
   });
 });
