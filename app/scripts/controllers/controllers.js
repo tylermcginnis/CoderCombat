@@ -45,6 +45,7 @@ angular.module('CoderCombatApp.controllers', [])
         if($scope.$modal){
           $scope.$modal('hide');
         }
+        console.log('questionObj about to be emmited', questionObj);
         socket.emit('sendQuestion', questionObj);
       });
       socket.on('loserModal', function(room){

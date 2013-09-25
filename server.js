@@ -121,7 +121,10 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('sendQuestion', function(questionObj){
     var room = socket['room'];
-    io.sockets.in(room).emit('updateQuestion',questionObj);
+    console.log('the rooms about to be sent the questions', roomList);
+    console.log('the real rooms about to be sent the question', io.sockets.manager.rooms);
+    io.sockets.in(room).emit('updateQuestion', questionObj);
+    console.log('here is the question OBJ on 127', questionObj);
     console.log('sendQuestion was called and sent to room - 123: ', room);
   });
 
@@ -244,6 +247,7 @@ io.sockets.on('connection', function (socket) {
           socketNew.join(firstDisconnectedRoom);
           console.log(socketNew.id + 'just joined 243' + firstDisconnectedRoom);
           socketNew.room = firstDisconnectedRoom;
+          io.sockets.in(firstDisconnectedRoom).emit('modalEnd'); //CHANGED THIS LINE
           numOfUndefines -= 2;
           console.log('numOfUndefines just got subtracted by 2 to be250', numOfUndefines);
           if(numOfUndefines < 0){
@@ -258,7 +262,7 @@ io.sockets.on('connection', function (socket) {
           io.sockets.in(firstDisconnectedRoom).emit('modalEnd'); //CHANGED THIS LINE
           console.log('modalEnd was just emitted to 256', firstDisconnectedRoom);
         }
-      }, 2000);
+      }, 500);
     }
 
     //guard on if a player disconnects before getting a partner
@@ -332,7 +336,7 @@ io.sockets.on('connection', function (socket) {
           }
         }
        }
-      }, 2000);
+      }, 500);
     }
     socket.leave(room); //added. try removing later. 
   });
