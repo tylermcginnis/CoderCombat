@@ -268,7 +268,7 @@ h3 #modalLogo{
     }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 500px) {
     #editor_submit-container{
         width: 95%;
         margin-top: 10px;
