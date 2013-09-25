@@ -8,7 +8,7 @@ var path = require('path');
  
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, { log: false });
 var mongoose = require('mongoose');
 
 var db = mongoose.createConnection("localhost", "codercombat");
@@ -58,9 +58,12 @@ var roomList = {};
 var numOfUndefines = 0;
 
 io.sockets.on('connection', function (socket) {
-  console.log('CONNECTED');
+  console.log(socket.id +  ' CONNECTED');
+  console.log('Room list -62', roomList);
+  console.log('real rooms 63', io.sockets.manager.rooms);
   
   initcount += 1;
+  console.log('new initcount - 64: ', initcount);
   if(numOfUndefines === 0){
     if(initcount % 2 === 1){
       roomcount += 1;
@@ -70,9 +73,11 @@ io.sockets.on('connection', function (socket) {
       roomList[room].user2 = socket.id;
     }
     socket.join(room);
+    console.log(socket.id + 'just joined 74 room: ' + room);
     socket['room'] = room;
     socket.in(room).emit('join', room);
   } else if(numOfUndefines > 0 && numOfUndefines % 2 === 1){
+    console.log('this is shown because numOfUndefines > 0 and odd')
     var disconnectedRoom;
     for(var property in roomList){
       if(roomList[property].user1 === 0){
@@ -80,32 +85,34 @@ io.sockets.on('connection', function (socket) {
         roomList[disconnectedRoom].user1 = socket.id;
         socket.join(disconnectedRoom);
         numOfUndefines--;
-        console.log('numOfUndefines - 95',numOfUndefines);
+        console.log('numOfUnd is now - 86: ',numOfUndefines);
         if(numOfUndefines < 0){
           numOfUndefines = 0;
         }
-        console.log('numOfUndefines - 99',numOfUndefines);
+        console.log('numOfUndefines is now - 90',numOfUndefines);
         socket.broadcast.emit('modalEnd');
       } else if(roomList[property].user2 === 0){
           disconnectedRoom = property;
           roomList[disconnectedRoom].user2 = socket.id;
           socket.join(disconnectedRoom);
+          console.log(socket.id + ' just joined room - 96: ' + disconnectedRoom);
           numOfUndefines--;
-          console.log('numOfUndefines - 104',numOfUndefines);
+          console.log('numOfUndefines is now - 98',numOfUndefines);
           if(numOfUndefines < 0){
             numOfUndefines = 0;
           }
-          console.log('numOfUndefines - 108',numOfUndefines);
+          console.log('numOfUndefines is now - 102',numOfUndefines);
           socket.broadcast.emit('modalEnd');
       }
     }
-      console.log('Room list -114', roomList);
-      console.log('real rooms 115', io.sockets.manager.rooms);
+      console.log('Room list -102', roomList);
+      console.log('real rooms 103', io.sockets.manager.rooms);
   } 
 
   socket.on('initialEditor', function(editorText){
     var room = socket['room'];
     socket.broadcast.to(room).emit('setInitialVals', editorText);
+    console.log('initialEditor was called on room -113: ', room);
   });
   socket.on('editorChange', function(fullText){
     var room = socket['room'];
@@ -115,31 +122,37 @@ io.sockets.on('connection', function (socket) {
   socket.on('sendQuestion', function(questionObj){
     var room = socket['room'];
     io.sockets.in(room).emit('updateQuestion',questionObj);
+    console.log('sendQuestion was called and sent to room - 123: ', room);
   });
 
   socket.on('init', function (room) {
-    console.log('This One yaa 119', initcount);
     if (initcount % 2 === 0){
         console.log('Initialize New Match in room ' , room);
-        socket.broadcast.emit('modalEnd');   
-                        console.log('Room list -124', roomList);
-            console.log('real rooms 125', io.sockets.manager.rooms);
+        io.sockets.in(room).emit('modalEnd');
+        console.log('modalEnd was just emitted to room - 130: ', room);
+        console.log('Room list -131', roomList);
+        console.log('real rooms 132', io.sockets.manager.rooms);
+        console.log('init count - 133', initcount);
       } else if(initcount % 2 === 1){
           console.log("Waiting for an opponent in room ", room);
-          socket.emit('modalStart');
-                          console.log('Room list -129', roomList);
-            console.log('real rooms 130', io.sockets.manager.rooms);
+          io.sockets.in(room).emit('modalStart');
+          console.log('modalStart was just emitted to room - 137: ', room);
+          console.log('Room list -138', roomList);
+          console.log('real rooms 139', io.sockets.manager.rooms);
+          console.log('initcount - 140', initcount);
       }
   });
 
   socket.on('youLost', function(room){
     room = socket['room'];
     socket.broadcast.to(room).emit('loserModal');
+    console.log('loserModal was just emmited to -147 room: ', room);
   });
 
   socket.on('disconnect', function (){
-    console.log('Disconnected');
+    console.log(socket.id + ' Disconnected');
     initcount -=1;
+    console.log('initcount just became', 153);
     var disconUser = socket.id;
     //for loop sets the disconnected user to 0 in roomList
     for (var prop in roomList) {
@@ -147,29 +160,38 @@ io.sockets.on('connection', function (socket) {
           roomList[prop].user1 = 0;
           room = prop;
           numOfUndefines++;
-          console.log('numOfUndefines - 141',numOfUndefines);
+          console.log('numOfUndefines just became - 161',numOfUndefines);
         } else if(roomList[prop].user2 === disconUser){
           roomList[prop].user2 = 0
           room = prop;
           numOfUndefines++;
-          console.log('numOfUndefines - 146',numOfUndefines);
+          console.log('numOfUndefines just became - 166',numOfUndefines);
         }
         if(roomList[prop].user1 === 0 && roomList[prop].user2 === 0){
           numOfUndefines -= 2
+          console.log('numofUnd just got subtracted by two to be 170-: ', numOfUndefines);
           if(numOfUndefines < 0){
             numOfUndefines = 0;
           }
-          console.log('numOfUndefines - 153',numOfUndefines);
+          console.log('numOfUndefines just became- 173',numOfUndefines);
           delete roomList[prop];
           roomcount--;
+          console.log('roomcount just became', roomcount);
         }
     }
-                console.log('Room list -158', roomList);
-            console.log('real rooms 159', io.sockets.manager.rooms);
+    console.log('Room list -180', roomList);
+    console.log('real rooms 181', io.sockets.manager.rooms);
     socket.broadcast.to(room).emit('oppDisconnect');
+    console.log('oppDisconnect was just emmitted to 183 room: ', room);
+
+    if(initcount === 0){
+      numOfUndefines = 0;
+      console.log('numOfUndefines became 0 because initcount was 0 - 187');
+    } 
 
     //two people with disconnected partners should be paired
     if(numOfUndefines % 2 === 0 && numOfUndefines > 0){
+      console.log('this was logged because numOfUndefines was even and > 0');
       var firstDisconnectedRoom;
       var firstDisconnectedUser;
       var secondDisconnectPartner;
@@ -188,6 +210,7 @@ io.sockets.on('connection', function (socket) {
               cont = false;
             }
           }
+
           if(roomList[roomNum].user1 === 0){
             secondDisconnectRoom = roomNum;
             secondDisconnectPartner = io.sockets.clients(secondDisconnectRoom)[0];
@@ -197,31 +220,43 @@ io.sockets.on('connection', function (socket) {
           }
         }
 
+          console.log('after loop, firstDisconnectedUser: 221:', firstDisconnectedUser);
+          console.log('firstDisconnectedRoom 222:', firstDisconnectedRoom);
+          console.log('secondDisconnectPartner 223', secondDisconnectPartner);
+          console.log('secondDisconnectRoom 224', secondDisconnectRoom);
+
         var socketNew = secondDisconnectPartner;
         if(socketNew){
           if(firstDisconnectedUser === 'user1'){
             roomList[firstDisconnectedRoom].user1 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
             roomcount--;
+            console.log('roomcount just became 232', roomcount);
           } else if(firstDisconnectedUser === 'user2'){
             roomList[firstDisconnectedRoom].user2 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
             roomcount--;
+            console.log('roomcount just became 237', roomcount);
           }
 
           socketNew.leave(secondDisconnectRoom);
+          console.log(socketNew.id + 'just left ' + secondDisconnectRoom);
           socketNew.join(firstDisconnectedRoom);
+          console.log(socketNew.id + 'just joined 243' + firstDisconnectedRoom);
           socketNew.room = firstDisconnectedRoom;
           numOfUndefines -= 2;
+          console.log('numOfUndefines just got subtracted by 2 to be250', numOfUndefines);
           if(numOfUndefines < 0){
             numOfUndefines = 0;
+            console.log('numOfUndefines just became 0 since it was negative, 249', numOfUndefines)
           }
-          console.log('numOfUndefines - 208',numOfUndefines);
           // io.sockets.in(firstDisconnectedRoom).emit('updateQuestion',questionObj);
           // io.sockets.in(firstDisconnectedRoom).emit('setInitialVals', editorText);
-                      console.log('Room list -212', roomList);
-            console.log('real rooms 213', io.sockets.manager.rooms);
-          socket.broadcast.emit('modalEnd');
+          console.log('Room list -233', roomList);
+          console.log('real rooms 234', io.sockets.manager.rooms);
+          // socket.broadcast.emit('modalEnd');
+          io.sockets.in(firstDisconnectedRoom).emit('modalEnd'); //CHANGED THIS LINE
+          console.log('modalEnd was just emitted to 256', firstDisconnectedRoom);
         }
       }, 2000);
     }
@@ -229,15 +264,18 @@ io.sockets.on('connection', function (socket) {
     //guard on if a player disconnects before getting a partner
     if(initcount === 0){
       numOfUndefines = 0;
+      console.log('265 numOfUndefines just became 0 since initcount was 0. this should never be logged');
     } 
     if(roomList[socket['room']]){
       if(Object.keys(roomList[socket['room']]).length === 1 && numOfUndefines === 1){
         numOfUndefines = 0
+        console.log(' 270 numOfUndefines just became 0 since it was the only room and the only numOfUndefines');
       }
     };
 
     //if player is looking for a partner when someone quits, pair new gamer with old widow
     if(initcount % 2 === 0 && numOfUndefines === 1){
+      console.log('276 this was logged because initcount is even and numOfUndefines was 1');
       var widowRoom;
       var widower;
       var newPlayer;
@@ -256,36 +294,47 @@ io.sockets.on('connection', function (socket) {
             go = false;
           }
         }
+        console.log('widowRoom 295', widowRoom);
+        console.log('widower 296', widower);
 
         if(roomList[roomNum]){
           if(Object.keys(roomList[roomNum]).length === 1){
             newPlayerRoom = roomNum;
+            console.log('305 newPlayerRoom', newPlayerRoom);
             newPlayer = io.sockets.clients(newPlayerRoom)[0];
+            console.log('306 newPlayer id', newPlayer.id);
             newPlayer.leave(newPlayerRoom);
+            console.log(newPlayer.id + 'just left ' + newPlayerRoom);
             newPlayer.join(widowRoom);
+            console.log(newPlayer.id + 'just joined 307' + widowRoom);
             newPlayer.room = widowRoom;
+            
             //match roomList to new room
             if(widower === 'user1'){
                 roomList[widowRoom].user1 = newPlayer.id;
                 delete roomList[newPlayerRoom];
                 roomcount--;
+                console.log('roomcount became 315', roomcount);
               } else if(widower === 'user2'){
                 roomList[widowRoom].user2 = newPlayer.id;
                 delete roomList[newPlayerRoom];
                 roomcount--;
+                console.log('roomcount became 320', roomcount);
               }
 
             numOfUndefines && (numOfUndefines--);
-            console.log('numOfUndefines - 255',numOfUndefines);
+            console.log('numOfUndefines just became- 324',numOfUndefines);
             io.sockets.in(widowRoom).emit('modalEnd');
-            console.log('Room list -268', roomList);
-            console.log('real rooms 269', io.sockets.manager.rooms);
+            console.log('modalEnd was just emitted to 326', widowRoom);
+            console.log('Room list -327', roomList);
+            console.log('real rooms 328', io.sockets.manager.rooms);
             break;
           }
         }
        }
-      }, 3000);
+      }, 2000);
     }
+    socket.leave(room); //added. try removing later. 
   });
 });
 
