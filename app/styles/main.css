@@ -238,9 +238,88 @@ h3 #modalLogo{
     padding-bottom: 10px;
 }
 
+/* winner modal */
+#countdown-container{
+    width: 90%;
+    margin: 0px auto;
+}
+.congrats{
+    text-align: center;
+    font-size: 22px;
+    font-family: sansationR;
+    padding-bottom: 20px;
+}
+
+#countdown-container #newMatch{
+    font-size: 18px;
+    text-align: center;
+}
+#countdown {
+    width: 50px;
+    font-size: 35px;
+    text-align: center;
+    margin: 21px auto;
+}
+#or{
+    text-align: center;
+}
+
+#button2 {
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fcfcfc), color-stop(1, #f0f0f0) );
+    background:-moz-linear-gradient( center top, #fcfcfc 5%, #f0f0f0 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f0f0f0');
+    background-color:#fcfcfc;
+    -webkit-border-top-left-radius:6px;
+    -moz-border-radius-topleft:6px;
+    border-top-left-radius:6px;
+    -webkit-border-top-right-radius:6px;
+    -moz-border-radius-topright:6px;
+    border-top-right-radius:6px;
+    -webkit-border-bottom-right-radius:6px;
+    -moz-border-radius-bottomright:6px;
+    border-bottom-right-radius:6px;
+    -webkit-border-bottom-left-radius:6px;
+    -moz-border-radius-bottomleft:6px;
+    border-bottom-left-radius:6px;
+    text-indent:0;
+    border:1px solid #dcdcdc;
+    display:inline-block;
+    color:#777777;
+    font-family:arial;
+    font-size:12px;
+    font-weight:bold;
+    font-style:normal;
+    height: 33px;
+    line-height: 33px;
+    width: 144px;
+    text-decoration:none;
+    text-align:center;
+    text-shadow:1px 1px 0px #ffffff;
+    cursor: pointer;
+    margin: 15px auto;
+    display: block;
+}
+
+#button2:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f0f0f0), color-stop(1, #ededed) );
+    background:-moz-linear-gradient( center top, #f0f0f0 5%, #ededed 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0f0f0', endColorstr='#ededed');
+    background-color:#f0f0f0;
+    color: #4e4e4e;
+}
+
+#button2:active {
+    position:relative;
+    top:1px;
+}
+
+
 @media screen and (max-width: 1200px) {
     body{
-        border: 5px solid green;
+        /*border: 5px solid green;*/
     }
     #editor_submit-container {
         width: 55%;
@@ -252,7 +331,7 @@ h3 #modalLogo{
 
 @media screen and (max-width: 800px) {
     body{
-        border: 5px solid red;
+        /*border: 5px solid red;*/
     }
     #editor_submit-container {
         width: 50%;
@@ -264,7 +343,7 @@ h3 #modalLogo{
 
 @media screen and (max-width: 700px) {
     body{
-        border: 5px solid yellow;
+        /*border: 5px solid yellow;*/
     }
 }
 
