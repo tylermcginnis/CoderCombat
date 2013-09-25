@@ -269,8 +269,42 @@ h3 #modalLogo{
 }
 
 @media screen and (max-width: 400px) {
-    body{
-        border: 5px solid black;
+    #editor_submit-container{
+        width: 95%;
+        margin-top: 10px;
+    }
+    #coding-challenge-header{
+        font-size: 22px;
+    }
+    #opponent-editor{
+        width: 95%;
+    }
+    #button{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    #editor-container{
+        position: relative;
+        top: 20px;
+    }
+    #logo-container{
+        width: 100%;
+        line-height: 200px;
+        position: absolute;
+        top: -60px;
+        left: 0;
+    }
+    #coding-challenge-container{
+        width: 100%;
+        margin-top: 90px;
+        line-height: 20px;
+    }
+
+    /*modal*/
+    body .modal{
+        width: 300px;
+        border-radius: 10px;
+        left: 88%;
     }
 }
 

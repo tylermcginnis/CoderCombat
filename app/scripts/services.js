@@ -26,8 +26,8 @@ angular.module('CoderCombatApp.services', [])
       var makeRequest = function(){
         return $http({
             method: 'GET',
-            // url: 'http://10.1.1.84:3000/getQuestion'
-            url: 'http://localhost:3000/getQuestion' 
+            url: 'http://10.1.1.84:3000/getQuestion'
+            // url: 'http://localhost:3000/getQuestion' 
         });
       }
       return {
