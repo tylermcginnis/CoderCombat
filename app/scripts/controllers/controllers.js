@@ -70,6 +70,16 @@ angular.module('CoderCombatApp.controllers', [])
         userAnswer = userAnswer.join("");
         var result = eval(userAnswer);
         if(result === answer){
+            //reset editors
+            socket.emit('editorAfterSubmit', originalContent);
+
+            var timeOut = setTimeout(function(){
+              socket.emit('anotherMatch');
+            }, 10000);
+
+            //tell the person who lost
+            socket.emit('youLost');
+
            //person who submitted it, congratuations modal
             $modal({
               template: '../../views/congratulations-modal.html',
@@ -77,12 +87,6 @@ angular.module('CoderCombatApp.controllers', [])
               scope: $scope
             }); 
 
-            //tell the opponent they lost.
-            socket.emit('youLost');
-            editor.getSession().setValue(originalContent);
-            var timeOut = setTimeout(function(){
-              socket.emit('anotherMatch');
-            }, 10000);
         } else { 
           alert('Looks like you didn\'t have the correct answer. Try again.');
         }

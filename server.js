@@ -115,6 +115,12 @@ io.sockets.on('connection', function (socket) {
     console.log('initialEditor was called on room -113: ', room);
   });
 
+  socket.on('editorAfterSubmit', function(text){
+    var room = socket['room'];
+    console.log('editorAfterSubmit about to be called in room', room);
+    io.sockets.in(room).emit('setInitialVals', text);
+  });
+
   socket.on('editorChange', function(fullText){
     var room = socket['room'];
     socket.broadcast.to(room).emit('sendChange', fullText);
