@@ -114,6 +114,7 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.to(room).emit('setInitialVals', editorText);
     console.log('initialEditor was called on room -113: ', room);
   });
+
   socket.on('editorChange', function(fullText){
     var room = socket['room'];
     socket.broadcast.to(room).emit('sendChange', fullText);
@@ -150,6 +151,11 @@ io.sockets.on('connection', function (socket) {
     room = socket['room'];
     socket.broadcast.to(room).emit('loserModal');
     console.log('loserModal was just emmited to -147 room: ', room);
+  });
+
+  socket.on('anotherMatch', function(){
+    var room = socket['room'];
+    io.sockets.in(room).emit('modalEnd');
   });
 
   socket.on('disconnect', function (){

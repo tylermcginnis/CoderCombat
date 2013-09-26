@@ -57,6 +57,11 @@ angular.module('CoderCombatApp.controllers', [])
       })
 
       $scope.evaluateCode = function(){
+        var originalContent = "function theAlgorithm(input){\n\
+  //your code here\n\
+  return input;\n\
+}"
+//ignore weird structure above. Needed for Ace Editor.
         var editor = ace.edit('leftEditor');
         var userAnswer = editor.getSession().getValue();
         userAnswer = userAnswer.split("");
@@ -74,6 +79,10 @@ angular.module('CoderCombatApp.controllers', [])
 
             //tell the opponent they lost.
             socket.emit('youLost');
+            editor.getSession().setValue(originalContent);
+            var timeOut = setTimeout(function(){
+              socket.emit('anotherMatch');
+            }, 10000);
         } else { 
           alert('Looks like you didn\'t have the correct answer. Try again.');
         }
