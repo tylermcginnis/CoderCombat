@@ -259,7 +259,7 @@ io.sockets.on('connection', function (socket) {
           socketNew.join(firstDisconnectedRoom);
           console.log(socketNew.id + 'just joined 243' + firstDisconnectedRoom);
           socketNew.room = firstDisconnectedRoom;
-          io.sockets.in(firstDisconnectedRoom).emit('modalEnd'); //CHANGED THIS LINE
+          // io.sockets.in(firstDisconnectedRoom).emit('modalEnd'); //CHANGED THIS LINE
           numOfUndefines -= 2;
           console.log('numOfUndefines just got subtracted by 2 to be250', numOfUndefines);
           if(numOfUndefines < 0){
