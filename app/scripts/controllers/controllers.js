@@ -69,8 +69,9 @@ angular.module('CoderCombatApp.controllers', [])
           keyboard: false,
           scope: $scope
         });
+        countdown.count();
       })
-
+      
       $scope.evaluateCode = function(){
         var originalContent = "function theAlgorithm(input){\n\
   //your code here\n\
@@ -102,6 +103,7 @@ angular.module('CoderCombatApp.controllers', [])
             keyboard: false,
             scope: $scope
           }); 
+          countdown.count();
         } else { 
           alert('Looks like you didn\'t have the correct answer. Try again.');
         }
