@@ -22,17 +22,17 @@ angular.module('CoderCombatApp.controllers', [])
           socket.emit('init', room);
       });
 
-      socket.on('oppDisconnect', function(){
+      socket.on('modalStart', function(){
         $modal({
-          template: '../../views/disconnect-modal.html',
+          template: '../../views/pairing-modal.html',
           keyboard: false,
           scope: $scope
         });
       });
 
-      socket.on('modalStart', function(){
+      socket.on('oppDisconnect', function(){
         $modal({
-          template: '../../views/pairing-modal.html',
+          template: '../../views/disconnect-modal.html',
           keyboard: false,
           scope: $scope
         });
@@ -71,7 +71,7 @@ angular.module('CoderCombatApp.controllers', [])
         });
         countdown.count();
       })
-      
+
       $scope.evaluateCode = function(){
         var originalContent = "function theAlgorithm(input){\n\
   //your code here\n\

@@ -18,6 +18,14 @@ body {
     color: #333;
 }
 
+body a{
+    color: rgba(51, 51, 51, 0.33);
+}
+
+body a:hover{
+    color: #333;
+}
+
 #main-container{
     width: 90%;
     margin: 20px auto;
