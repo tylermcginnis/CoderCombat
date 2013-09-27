@@ -129,24 +129,35 @@ io.sockets.on('connection', function (socket) {
   socket.on('sendQuestion', function(questionObj){
     var theQuestion = {};
     var room = socket['room'];
-    console.log('this!', questionObj[0].rnd);
-    if(questionObj[0].rnd){
-      roomList[room].rnd = questionObj[0].rnd;
-      console.log("THIS IS THE FIRST RANDOM NUMBER! : ", roomList[room].rnd);
+    console.log('the roomList 132', roomList);
+    if(questionObj[1].rnd !== undefined){
+      console.log("THE ROOM 134", room);
+      if(roomList[room]){
+        roomList[room].rnd = questionObj[1].rnd;
+      }
     }
-    if(roomList[room].rnd === undefined){
+
+    if(roomList[room]){
+      if(roomList[room].rnd === undefined){
         roomList[room].rnd = Math.floor(Math.random() * questionObj.length-1) + 1;
         console.log("THIS IS THE SECOND RANDOM NUMBER! NO LOG : ", roomList[room].rnd);
+      }
     }
+
     console.log('roomList after', roomList);
-    theQuestion.title = questionObj[roomList[room].rnd].title;
-    theQuestion.challenge = questionObj[roomList[room].rnd].question;
-    theQuestion.parameter = questionObj[roomList[room].rnd].parameter;
-    theQuestion.answer = questionObj[roomList[room].rnd].answer;
-    console.log("This is the question title being sent to updateQuestion", theQuestion.title);
-    
-    //only send the final quesiton to updateQuestion
-    io.sockets.in(room).emit('updateQuestion', theQuestion);
+    if(roomList[room]){
+      if(roomList[room].rnd){
+        theQuestion.title = questionObj[roomList[room].rnd].title;
+        theQuestion.challenge = questionObj[roomList[room].rnd].question;
+        theQuestion.parameter = questionObj[roomList[room].rnd].parameter;
+        theQuestion.answer = questionObj[roomList[room].rnd].answer;
+        console.log("This is the question title being sent to updateQuestion", theQuestion.title);
+      
+        //only send the final quesiton to updateQuestion
+        io.sockets.in(room).emit('updateQuestion', theQuestion);
+      }
+    }
+
   });
 
   socket.on('init', function (room) {

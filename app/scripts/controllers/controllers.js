@@ -34,10 +34,11 @@ angular.module('CoderCombatApp.controllers', [])
       });
       socket.on('modalEnd', function(rand){
         if(rand){
-          questionObj[0].rnd = rand;
+          questionObj[1].rnd = rand;
           console.log('new', questionObj);
           socket.emit('sendQuestion', questionObj);
         } else{
+          questionObj[1].rnd = undefined;
           socket.emit('sendQuestion', questionObj);
         } 
         if($scope.$modal){
@@ -45,25 +46,16 @@ angular.module('CoderCombatApp.controllers', [])
         }
       });
       socket.on('updateQuestion', function(questionObj){
-        // var e = document.getElementById('main-container');
-        // var s = angular.element(e).scope();
-        // console.log("S", s);
-        // s.safeApply(function(){
-        //   s.challenge = questionObj.challenge;
-        //   s.title = questionObj.title;
-        //   answer = questionObj.answer;
-        //   parameter = questionObj.parameter;
-        // });
-
         console.log('this is the question recieved on updateQuestion', questionObj);
-        $scope.safeApply(function(){
+        //Don't judge me for what I'm about to do, it will all be over soon.
+        $('#coding-challenge-header').text(questionObj.title);
+        $('#problem').text(questionObj.challenge);
+        //It's all over. No more DOM manipulation from the Cntrl using jQuery. Promise.
+
           $scope.challenge = questionObj.challenge;
           $scope.title = questionObj.title;
           answer = questionObj.answer;
           parameter = questionObj.parameter;
-        });
-
-        console.log('$scope.title', $scope.title);
       });
       socket.on('loserModal', function(room){
         $modal({
