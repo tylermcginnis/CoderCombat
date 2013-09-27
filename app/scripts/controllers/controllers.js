@@ -10,14 +10,16 @@ angular.module('CoderCombatApp.controllers', [])
       var parameter;
       httpConnect.connect()
           .success(function(data, status){
-            alert('successful connection');
+            console.log('HttpConnection Made')
             questionObj = data;
           }).error(function(data, status){
             console.log("An error occured on httpConnect");
           });
+
       socket.on('join', function (room) {
           socket.emit('init', room);
       });
+
       socket.on('oppDisconnect', function(){
         $modal({
           template: '../../views/disconnect-modal.html',
@@ -25,6 +27,7 @@ angular.module('CoderCombatApp.controllers', [])
           scope: $scope
         });
       });
+
       socket.on('modalStart', function(){
         $modal({
           template: '../../views/pairing-modal.html',
@@ -32,10 +35,10 @@ angular.module('CoderCombatApp.controllers', [])
           scope: $scope
         });
       });
+
       socket.on('modalEnd', function(rand){
         if(rand){
           questionObj[1].rnd = rand;
-          console.log('new', questionObj);
           socket.emit('sendQuestion', questionObj);
         } else{
           questionObj[1].rnd = undefined;
@@ -45,18 +48,19 @@ angular.module('CoderCombatApp.controllers', [])
           $scope.$modal('hide');
         }
       });
+
       socket.on('updateQuestion', function(questionObj){
-        console.log('this is the question recieved on updateQuestion', questionObj);
         //Don't judge me for what I'm about to do, it will all be over soon.
         $('#coding-challenge-header').text(questionObj.title);
         $('#problem').text(questionObj.challenge);
         //It's all over. No more DOM manipulation from the Cntrl using jQuery. Promise.
 
-          $scope.challenge = questionObj.challenge;
-          $scope.title = questionObj.title;
-          answer = questionObj.answer;
-          parameter = questionObj.parameter;
+        $scope.challenge = questionObj.challenge;
+        $scope.title = questionObj.title;
+        answer = questionObj.answer;
+        parameter = questionObj.parameter;
       });
+
       socket.on('loserModal', function(room){
         $modal({
           template: '../../views/loser-modal.html',
@@ -71,6 +75,7 @@ angular.module('CoderCombatApp.controllers', [])
   return input;\n\
 }"
 //ignore weird structure above. Needed for Ace Editor.
+
         var editor = ace.edit('leftEditor');
         var userAnswer = editor.getSession().getValue();
         userAnswer = userAnswer.split("");
@@ -79,23 +84,22 @@ angular.module('CoderCombatApp.controllers', [])
         userAnswer = userAnswer.join("");
         var result = eval(userAnswer);
         if(result === answer){
-            //reset editors
-            socket.emit('editorAfterSubmit', originalContent);
+          //reset editors
+          socket.emit('editorAfterSubmit', originalContent);
 
-            var timeOut = setTimeout(function(){
-              socket.emit('anotherMatch');
-            }, 10000);
+          var timeOut = setTimeout(function(){
+            socket.emit('anotherMatch');
+          }, 10000);
 
-            //tell the person who lost
-            socket.emit('youLost');
+          //tell the person who lost
+          socket.emit('youLost');
 
-           //person who submitted it, congratuations modal
-            $modal({
-              template: '../../views/congratulations-modal.html',
-              keyboard: false,
-              scope: $scope
-            }); 
-
+         //person who submitted it, congratuations modal
+          $modal({
+            template: '../../views/congratulations-modal.html',
+            keyboard: false,
+            scope: $scope
+          }); 
         } else { 
           alert('Looks like you didn\'t have the correct answer. Try again.');
         }
