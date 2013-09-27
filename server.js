@@ -52,18 +52,18 @@ app.use(express.methodOverride());
 app.use(app.router);
 
 var room;
-var initcount = 0;
-var roomcount = 0;
+var initCount = 0;
+var roomCount = 0;
 var roomList = {};
 var numOfUndefines = 0;
 
 io.sockets.on('connection', function (socket) {
   console.log(socket.id +  ' CONNECTED');
-  initcount += 1;
+  initCount += 1;
   if(numOfUndefines === 0){
-    if(initcount % 2 === 1){
-      roomcount += 1;
-      room = roomcount.toString();
+    if(initCount % 2 === 1){
+      roomCount += 1;
+      room = roomCount.toString();
       roomList[room] = {user1: socket.id};
     } else {
       roomList[room].user2 = socket.id;
@@ -128,23 +128,25 @@ io.sockets.on('connection', function (socket) {
 
     if(roomList[room]){
       if(roomList[room].rnd){
-        theQuestion.title = questionObj[roomList[room].rnd].title;
-        theQuestion.challenge = questionObj[roomList[room].rnd].question;
-        theQuestion.parameter = questionObj[roomList[room].rnd].parameter;
-        theQuestion.answer = questionObj[roomList[room].rnd].answer;
-      
-        //only send the final quesiton to updateQuestion
-        io.sockets.in(room).emit('updateQuestion', theQuestion);
+        if(questionObj[roomList[room].rnd]){
+          theQuestion.title = questionObj[roomList[room].rnd].title;
+          theQuestion.challenge = questionObj[roomList[room].rnd].question;
+          theQuestion.parameter = questionObj[roomList[room].rnd].parameter;
+          theQuestion.answer = questionObj[roomList[room].rnd].answer;
+        
+          //only send the final quesiton to updateQuestion
+          io.sockets.in(room).emit('updateQuestion', theQuestion);
+        }
       }
     }
 
   });
 
   socket.on('init', function (room) {
-    if (initcount % 2 === 0){
+    if(initCount % 2 === 0){
         console.log('Initialize New Match in room ' , room);
         io.sockets.in(room).emit('modalEnd');
-      } else if(initcount % 2 === 1){
+      } else if(initCount % 2 === 1){
           console.log("Waiting for an opponent in room ", room);
           io.sockets.in(room).emit('modalStart');
       }
@@ -162,7 +164,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function (){
-    initcount -=1;
+    initCount -=1;
     var disconUser = socket.id;
     //for loop sets the disconnected user to 0 in roomList
     for (var prop in roomList) {
@@ -182,13 +184,13 @@ io.sockets.on('connection', function (socket) {
             numOfUndefines = 0;
           }
           delete roomList[prop];
-          roomcount--;
+          roomCount--;
         }
     }
 
     socket.broadcast.to(room).emit('oppDisconnect');
 
-    if(initcount === 0){
+    if(initCount === 0){
       numOfUndefines = 0;
     } 
 
@@ -227,11 +229,11 @@ io.sockets.on('connection', function (socket) {
           if(firstDisconnectedUser === 'user1'){
             roomList[firstDisconnectedRoom].user1 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
-            roomcount--;
+            roomCount--;
           } else if(firstDisconnectedUser === 'user2'){
             roomList[firstDisconnectedRoom].user2 = secondDisconnectPartner.id;
             delete roomList[secondDisconnectRoom];
-            roomcount--;
+            roomCount--;
           }
 
           socketNew.leave(secondDisconnectRoom);
@@ -249,7 +251,7 @@ io.sockets.on('connection', function (socket) {
     }
 
     //guard on if a player disconnects before getting a partner
-    if(initcount === 0){
+    if(initCount === 0){
       numOfUndefines = 0;
     } 
 
@@ -260,7 +262,7 @@ io.sockets.on('connection', function (socket) {
     };
 
     //if player is looking for a partner when someone quits, pair new gamer with old widow
-    if(initcount % 2 === 0 && numOfUndefines === 1){
+    if(initCount % 2 === 0 && numOfUndefines === 1){
       var widowRoom;
       var widower;
       var newPlayer;
@@ -292,11 +294,11 @@ io.sockets.on('connection', function (socket) {
               if(widower === 'user1'){
                   roomList[widowRoom].user1 = newPlayer.id;
                   delete roomList[newPlayerRoom];
-                  roomcount--;
+                  roomCount--;
                 } else if(widower === 'user2'){
                   roomList[widowRoom].user2 = newPlayer.id;
                   delete roomList[newPlayerRoom];
-                  roomcount--;
+                  roomCount--;
                 }
 
               numOfUndefines && (numOfUndefines--);

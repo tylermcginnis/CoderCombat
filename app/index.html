@@ -7,7 +7,7 @@
   <head>
     <link rel="stylesheet" href="styles/main.css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,300italic' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,300italic" rel="stylesheet">
     
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,7 +18,7 @@
   </head>
 
   <body ng-app="CoderCombatApp"> 
-    <!--
+<!--
  .d8888b.                888                   .d8888b.                         888               888    
 d88P  Y88b               888                  d88P  Y88b                        888               888    
 888    888               888                  888    888                        888               888    
@@ -27,9 +27,8 @@ d88P  Y88b               888                  d88P  Y88b                        
 888    888 888  888 888  888 88888888 888     888    888 888  888 888  888  888 888  888 .d888888 888    
 Y88b  d88P Y88..88P Y88b 888 Y8b.     888     Y88b  d88P Y88..88P 888  888  888 888 d88P 888  888 Y88b.  
  "Y8888P"   "Y88P"   "Y88888  "Y8888  888      "Y8888P"   "Y88P"  888  888  888 88888P"  "Y888888  "Y888 
-                                                                                                         
 !-->
-    <div id='main-container' ng-controller = 'mainCntrl'> 
+    <div id='main-container' ng-controller='mainCntrl'> 
       <!--[if lt IE 7]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
@@ -39,23 +38,33 @@ Y88b  d88P Y88..88P Y88b 888 Y8b.     888     Y88b  d88P Y88..88P 888  888  888 
         <script src="bower_components/json3/lib/json3.min.js"></script>
       <![endif]-->
       
-      <div id = 'logo-challenge-container'>
-        <div ng-view id='coding-challenge-container'></div>
-        <div id='logo-container'><img src = "img/codercombat.png"/></div>
+      <div id="logo-challenge-container">
+        <div ng-view id="coding-challenge-container"></div>
+        <div id="logo-container"><img src="img/codercombat.png"/></div>
       </div> 
 
-      <div id = 'editors-container'>
-        <editor1><span ng-bind='editor'></span></editor1>
-        <editor2><span ng-bind='oEditor'></span></editor2>
+      <div id = "editors-container">
+        <editor1><span ng-bind="editor"></span></editor1>
+        <editor2><span ng-bind="oEditor"></span></editor2>
       </div> 
 
-      <div id='footer-container'>
+      <div id="footer-container">
         <foot></foot>
       </div>
     </div> 
 
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-44434903-1', 'codercombat.com');
+      ga('send', 'pageview');
+    </script>
+
     <script src="/socket.io/socket.io.js"></script>
-    <script src="ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="ace-builds/src-min-noconflict/ace.js" charset="utf-8"></script>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
     <script src="bower_components/angular/angular.js"></script>
@@ -64,20 +73,10 @@ Y88b  d88P Y88..88P Y88b 888 Y8b.     888     Y88b  d88P Y88..88P 888  888  888 
     <script src="//mgcrea.github.com/angular-strap/js/angular-strap.js"></script>
 
 
-    <script type = "text/javascript" src="scripts/app.js"></script>
-    <script type = "text/javascript" src="scripts/controllers/controllers.js"></script>
-    <script type = "text/javascript" src="scripts/services.js"></script>
-    <script type = "text/javascript" src="scripts/directives.js"></script>
-
-    <script>
-       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/controllers.js"></script>
+    <script src="scripts/services.js"></script>
+    <script src="scripts/directives.js"></script>
 
   </body>
 </html>
