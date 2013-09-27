@@ -108,11 +108,13 @@ body {
 
 #footer{
     text-align: center;
+    float: right;
+    margin-top: 10px;
 }
 
 #footer li {
     display: inline;
-    margin: 25px;
+    margin-left: 50px;
     color: rgba(51, 51, 51, 0.33);
 }
 
@@ -315,7 +317,12 @@ h3 #modalLogo{
     position:relative;
     top:1px;
 }
-
+@media screen and (min-width: 1800px){
+    #logo-container{
+        width: 30%;
+        margin: -40px 73px;
+    }
+}
 
 @media screen and (max-width: 1200px) {
     body{
@@ -377,6 +384,16 @@ h3 #modalLogo{
         width: 100%;
         margin-top: 90px;
         line-height: 20px;
+    }
+    #footer{
+        float: none;
+    }
+    #footer li{
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    body ul{
+        margin: 0;
     }
 
     /*modal*/

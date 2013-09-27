@@ -3,11 +3,12 @@ angular.module('CoderCombatApp.controllers', [])
     '$scope', 
     'socket', 
     '$modal', 
-    'httpConnect', 
+    'httpConnect',
     function ($scope, socket, $modal, httpConnect) { 
       var questionObj = {};
       var answer;
       var parameter;
+
       httpConnect.connect()
           .success(function(data, status){
             console.log('HttpConnection Made')
@@ -15,7 +16,7 @@ angular.module('CoderCombatApp.controllers', [])
           }).error(function(data, status){
             console.log("An error occured on httpConnect");
           });
-
+      
       socket.on('join', function (room) {
           socket.emit('init', room);
       });
