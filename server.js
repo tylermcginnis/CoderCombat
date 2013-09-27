@@ -122,7 +122,7 @@ io.sockets.on('connection', function (socket) {
 
     if(roomList[room]){
       if(roomList[room].rnd === undefined){
-        roomList[room].rnd = Math.floor(Math.random() * questionObj.length-1) + 1;
+        roomList[room].rnd = Math.floor(Math.random() * questionObj.length-1) + 2;
       }
     }
 
@@ -157,7 +157,7 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('anotherMatch', function(){
     var room = socket['room'];
-    var random = Math.floor(Math.random() * 10-1) + 1;
+    var random = Math.floor(Math.random() * 10-1) + 2;
     io.sockets.in(room).emit('modalEnd', random);
   });
 
@@ -242,7 +242,7 @@ io.sockets.on('connection', function (socket) {
             numOfUndefines = 0;
           }
 
-          var random = Math.floor(Math.random() * 10-1) + 1;
+          var random = Math.floor(Math.random() * 10-1) + 2;
           io.sockets.in(firstDisconnectedRoom).emit('modalEnd', random);
         }
       }, 500);
@@ -300,7 +300,7 @@ io.sockets.on('connection', function (socket) {
                 }
 
               numOfUndefines && (numOfUndefines--);
-              var random = Math.floor(Math.random() * 10-1) + 1;
+              var random = Math.floor(Math.random() * 10-1) + 2;
               io.sockets.in(widowRoom).emit('modalEnd', random);
               break;
             }
