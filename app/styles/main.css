@@ -411,6 +411,9 @@ h3 #modalLogo{
         border-radius: 10px;
         left: 88%;
     }
+    #coding-challenge{
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 200px) {
