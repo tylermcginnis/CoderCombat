@@ -40,7 +40,15 @@ Y88b  d88P Y88..88P Y88b 888 Y8b.     888     Y88b  d88P Y88..88P 888  888  888 
       <![endif]-->
       
       <div id = 'logo-challenge-container'>
-        <div ng-view id='coding-challenge-container'></div>
+        <div id='coding-challenge-container'>
+          <div id="coding-challenge">
+          <div id='coding-challenge-header'>{{title}}</div>
+          <div id='problem'>
+            {{challenge}}
+          </div>
+      </div>
+
+        </div>
         <div id='logo-container'><img src = "img/codercombat.png"/></div>
       </div> 
 

@@ -127,12 +127,26 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('sendQuestion', function(questionObj){
+    var theQuestion = {};
     var room = socket['room'];
-    console.log('the rooms about to be sent the questions', roomList);
-    console.log('the real rooms about to be sent the question', io.sockets.manager.rooms);
-    io.sockets.in(room).emit('updateQuestion', questionObj);
-    console.log('here is the question OBJ on 127', questionObj);
-    console.log('sendQuestion was called and sent to room - 123: ', room);
+    console.log('this!', questionObj[0].rnd);
+    if(questionObj[0].rnd){
+      roomList[room].rnd = questionObj[0].rnd;
+      console.log("THIS IS THE FIRST RANDOM NUMBER! : ", roomList[room].rnd);
+    }
+    if(roomList[room].rnd === undefined){
+        roomList[room].rnd = Math.floor(Math.random() * questionObj.length-1) + 1;
+        console.log("THIS IS THE SECOND RANDOM NUMBER! NO LOG : ", roomList[room].rnd);
+    }
+    console.log('roomList after', roomList);
+    theQuestion.title = questionObj[roomList[room].rnd].title;
+    theQuestion.challenge = questionObj[roomList[room].rnd].question;
+    theQuestion.parameter = questionObj[roomList[room].rnd].parameter;
+    theQuestion.answer = questionObj[roomList[room].rnd].answer;
+    console.log("This is the question title being sent to updateQuestion", theQuestion.title);
+    
+    //only send the final quesiton to updateQuestion
+    io.sockets.in(room).emit('updateQuestion', theQuestion);
   });
 
   socket.on('init', function (room) {
@@ -161,7 +175,8 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('anotherMatch', function(){
     var room = socket['room'];
-    io.sockets.in(room).emit('modalEnd');
+    var random = Math.floor(Math.random() * 10-1) + 1;
+    io.sockets.in(room).emit('modalEnd', random);
   });
 
   socket.on('disconnect', function (){
@@ -271,7 +286,8 @@ io.sockets.on('connection', function (socket) {
           console.log('Room list -233', roomList);
           console.log('real rooms 234', io.sockets.manager.rooms);
           // socket.broadcast.emit('modalEnd');
-          io.sockets.in(firstDisconnectedRoom).emit('modalEnd'); //CHANGED THIS LINE
+          var random = Math.floor(Math.random() * 10-1) + 1;
+          io.sockets.in(firstDisconnectedRoom).emit('modalEnd', random); //CHANGED THIS LINE
           console.log('modalEnd was just emitted to 256', firstDisconnectedRoom);
         }
       }, 500);
@@ -340,7 +356,8 @@ io.sockets.on('connection', function (socket) {
 
             numOfUndefines && (numOfUndefines--);
             console.log('numOfUndefines just became- 324',numOfUndefines);
-            io.sockets.in(widowRoom).emit('modalEnd');
+            var random = Math.floor(Math.random() * 10-1) + 1;
+            io.sockets.in(widowRoom).emit('modalEnd', random);
             console.log('modalEnd was just emitted to 326', widowRoom);
             console.log('Room list -327', roomList);
             console.log('real rooms 328', io.sockets.manager.rooms);

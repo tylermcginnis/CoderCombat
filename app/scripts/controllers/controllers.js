@@ -10,20 +10,11 @@ angular.module('CoderCombatApp.controllers', [])
       var parameter;
       httpConnect.connect()
           .success(function(data, status){
-            var rnd = Math.floor(Math.random() * data.length-1) + 1;
-            questionObj.title = data[rnd].title;
-            questionObj.challenge = data[rnd].question;
-            questionObj.parameter = data[rnd].parameter;
-            questionObj.answer = data[rnd].answer;
+            alert('successful connection');
+            questionObj = data;
           }).error(function(data, status){
             console.log("An error occured on httpConnect");
           });
-      socket.on('updateQuestion', function(questionObj){
-        $scope.challenge = questionObj.challenge;
-        $scope.title = questionObj.title;
-        answer = questionObj.answer;
-        parameter = questionObj.parameter;
-      });
       socket.on('join', function (room) {
           socket.emit('init', room);
       });
@@ -41,12 +32,38 @@ angular.module('CoderCombatApp.controllers', [])
           scope: $scope
         });
       });
-      socket.on('modalEnd', function(){
+      socket.on('modalEnd', function(rand){
+        if(rand){
+          questionObj[0].rnd = rand;
+          console.log('new', questionObj);
+          socket.emit('sendQuestion', questionObj);
+        } else{
+          socket.emit('sendQuestion', questionObj);
+        } 
         if($scope.$modal){
           $scope.$modal('hide');
         }
-        console.log('questionObj about to be emmited', questionObj);
-        socket.emit('sendQuestion', questionObj);
+      });
+      socket.on('updateQuestion', function(questionObj){
+        // var e = document.getElementById('main-container');
+        // var s = angular.element(e).scope();
+        // console.log("S", s);
+        // s.safeApply(function(){
+        //   s.challenge = questionObj.challenge;
+        //   s.title = questionObj.title;
+        //   answer = questionObj.answer;
+        //   parameter = questionObj.parameter;
+        // });
+
+        console.log('this is the question recieved on updateQuestion', questionObj);
+        $scope.safeApply(function(){
+          $scope.challenge = questionObj.challenge;
+          $scope.title = questionObj.title;
+          answer = questionObj.answer;
+          parameter = questionObj.parameter;
+        });
+
+        console.log('$scope.title', $scope.title);
       });
       socket.on('loserModal', function(room){
         $modal({
