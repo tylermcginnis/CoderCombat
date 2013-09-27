@@ -6,72 +6,71 @@ angular.module('CoderCombatApp.controllers', [])
     'httpConnect',
     'countdown',
     function ($scope, socket, $modal, httpConnect, countdown) { 
-      var questionObj = {};
       var answer;
       var parameter;
 
       httpConnect.connect()
           .success(function(data, status){
             console.log('HttpConnection Made')
-            questionObj = data;
+            initialize(data);
           }).error(function(data, status){
             console.log("An error occured on httpConnect");
           });
-
-      socket.on('join', function (room) {
-          socket.emit('init', room);
-      });
-
-      socket.on('modalStart', function(){
-        $modal({
-          template: '../../views/pairing-modal.html',
-          keyboard: false,
-          scope: $scope
+      function initialize(questionObj){
+        socket.on('join', function (room) {
+            socket.emit('init', room);
         });
-      });
 
-      socket.on('oppDisconnect', function(){
-        $modal({
-          template: '../../views/disconnect-modal.html',
-          keyboard: false,
-          scope: $scope
+        socket.on('modalStart', function(){
+          $modal({
+            template: '../../views/pairing-modal.html',
+            keyboard: false,
+            scope: $scope
+          });
         });
-      });
 
-      socket.on('modalEnd', function(rand){
-        if(rand){
-          questionObj[1].rnd = rand;
-          socket.emit('sendQuestion', questionObj);
-        } else{
-          questionObj[1].rnd = undefined;
-          socket.emit('sendQuestion', questionObj);
-        } 
-        if($scope.$modal){
-          $scope.$modal('hide');
-        }
-      });
-
-      socket.on('updateQuestion', function(questionObj){
-        //Don't judge me for what I'm about to do, it will all be over soon.
-        $('#coding-challenge-header').text(questionObj.title);
-        $('#problem').text(questionObj.challenge);
-        //It's all over. No more DOM manipulation from the Cntrl using jQuery. Promise.
-
-        $scope.challenge = questionObj.challenge;
-        $scope.title = questionObj.title;
-        answer = questionObj.answer;
-        parameter = questionObj.parameter;
-      });
-
-      socket.on('loserModal', function(room){
-        $modal({
-          template: '../../views/loser-modal.html',
-          keyboard: false,
-          scope: $scope
+        socket.on('oppDisconnect', function(){
+          $modal({
+            template: '../../views/disconnect-modal.html',
+            keyboard: false,
+            scope: $scope
+          });
         });
-        countdown.count();
-      })
 
+        socket.on('modalEnd', function(rand){
+          if(rand){
+            questionObj[1].rnd = rand;
+            socket.emit('sendQuestion', questionObj);
+          } else{
+            questionObj[1].rnd = undefined;
+            socket.emit('sendQuestion', questionObj);
+          } 
+          if($scope.$modal){
+            $scope.$modal('hide');
+          }
+        });
+
+        socket.on('updateQuestion', function(questionObj){
+          //Don't judge me for what I'm about to do, it will all be over soon.
+          $('#coding-challenge-header').text(questionObj.title);
+          $('#problem').text(questionObj.challenge);
+          //It's all over. No more DOM manipulation from the Cntrl using jQuery. Promise.
+
+          $scope.challenge = questionObj.challenge;
+          $scope.title = questionObj.title;
+          answer = questionObj.answer;
+          parameter = questionObj.parameter;
+        });
+
+        socket.on('loserModal', function(room){
+          $modal({
+            template: '../../views/loser-modal.html',
+            keyboard: false,
+            scope: $scope
+          });
+          countdown.count();
+        })
+      }
       $scope.evaluateCode = function(){
         var originalContent = "function theAlgorithm(input){\n\
   //your code here\n\
