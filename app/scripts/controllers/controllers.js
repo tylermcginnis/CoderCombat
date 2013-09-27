@@ -56,7 +56,7 @@ angular.module('CoderCombatApp.controllers', [])
           $('#problem').text(questionObj.challenge);
           //It's all over. No more DOM manipulation from the Cntrl using jQuery. Promise.
 
-          $scope.challenge = questionObj.challenge;
+          $scope.challenge = questionObj.question;
           $scope.title = questionObj.title;
           answer = questionObj.answer;
           parameter = questionObj.parameter;

@@ -7,6 +7,8 @@ var http = require('http');
 var path = require('path');
  
 var app = express();
+
+
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, { log: false });
 var mongoose = require('mongoose');
@@ -129,11 +131,8 @@ io.sockets.on('connection', function (socket) {
     if(roomList[room]){
       if(roomList[room].rnd){
         if(questionObj[roomList[room].rnd]){
-          theQuestion.title = questionObj[roomList[room].rnd].title;
-          theQuestion.challenge = questionObj[roomList[room].rnd].question;
-          theQuestion.parameter = questionObj[roomList[room].rnd].parameter;
-          theQuestion.answer = questionObj[roomList[room].rnd].answer;
-        
+          theQuestion = questionObj[roomList[room].rnd];
+
           //only send the final quesiton to updateQuestion
           io.sockets.in(room).emit('updateQuestion', theQuestion);
         }

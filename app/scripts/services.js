@@ -1,6 +1,6 @@
 angular.module('CoderCombatApp.services', [])
     .factory('socket', function($rootScope){
-      var socket = io.connect(); //should be io.connect(http://localhost)?
+      var socket = io.connect(); //connects to socket server wherever I deploy it.
       return {
         on: function(eventName, callback){
           socket.on(eventName, function(){
@@ -43,8 +43,7 @@ angular.module('CoderCombatApp.services', [])
       var makeRequest = function(){
         return $http({
             method: 'GET',
-            url: 'http://10.1.1.84:3000/getQuestion'
-            // url: 'http://localhost:3000/getQuestion' 
+            url: '/getQuestion'
         });
       }
       return {
