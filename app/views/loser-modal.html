@@ -6,19 +6,9 @@
         <p class="congrats">Sorry. You Lost, Loser.</p>
         <div id="countdown-container">
             <div id='newMatch'> A New Match will Begin in... </div>
-            <div id='countdown'> <script> 
-              var count = 10;
-              var counter = setInterval(timer, 1000);
-                function timer(){
-                    count -= 1;
-                    if (count <= 0){
-                     clearInterval(counter);
-                     return;
-                    }
-                    document.getElementById("timer").innerHTML = count;
-                }
-                </script>
-                <span id='timer'></span> </div>
+            <div id='countdown'> 
+                <span id='timer'></span> 
+            </div>
             <div id='or'> Or </div>
             <div id='button2' onClick="window.location.reload()"> Find New Opponnent </div>
         </div>
