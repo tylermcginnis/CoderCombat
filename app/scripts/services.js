@@ -22,11 +22,11 @@ angular.module('CoderCombatApp.services', [])
         }
       }
     })
-    .factory('countdown', function(){
+    .factory('countdown', function($timeout){
       return {
         count: function(){
           var count = 10;
-          var counter = setInterval(timer, 1000);
+          var counter = $timeout(timer, 1000);
             function timer(){
               count -= 1;
               if(count <= 0){
@@ -34,6 +34,7 @@ angular.module('CoderCombatApp.services', [])
                 return;
               }
               document.getElementById('timer').innerHTML = count;
+              counter = $timeout(timer, 1000);
             }
         }
       }
