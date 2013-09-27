@@ -56,6 +56,7 @@ body {
 
 #coding-challenge{
     height: 200px;
+    width: 90%;
 }
 
 #editors-container {
@@ -336,7 +337,7 @@ h3 #modalLogo{
     }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 950px) {
     body{
         /*border: 5px solid red;*/
     }
