@@ -11,4 +11,4 @@ the winner and loser will both be notified and a ten second countdown will prepa
 
 <img src="http://www.tylermcginnis.com/images/coderCombatSearching.png" alt="Coder Combat Searching" />
 <br>
-<img src="http://www.tylermcginnis.com/images/CoderCombatRoom.png" alt="Coder Combat Room"
+<img src="http://www.tylermcginnis.com/images/CoderCombatRoom.png" alt="Coder Combat Room" />
