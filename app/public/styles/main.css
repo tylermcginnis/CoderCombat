@@ -1,16 +1,16 @@
 @font-face {
     font-family: sansationH;
-    src: url('../SansationFont/Sansation_Bold.ttf') format('truetype');
+    src: url('./SansationFont/Sansation_Bold.ttf') format('truetype');
 }
 
 @font-face {
     font-family: sansationR;
-    src: url('../SansationFont/Sansation_Regular.ttf') format('truetype');
+    src: url('./SansationFont/Sansation_Regular.ttf') format('truetype');
 }
 
 @font-face {
     font-family: sansationL;
-    src: url('../SansationFont/Sansation_Light.ttf') format('truetype');
+    src: url('./SansationFont/Sansation_Light.ttf') format('truetype');
 }
 
 body {
