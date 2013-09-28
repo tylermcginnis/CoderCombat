@@ -7,7 +7,6 @@ var http = require('http');
 var app = express();
 
 require('./config/environments.js')(app);
-require('./config/db.js')(app);
 require('./config/middleware.js')(app);
 require('./config/routes.js')(app);
 
