@@ -18,16 +18,7 @@ the winner and loser will both be notified and a ten second countdown will prepa
 <br />
 <h3> Technical Description </h3>
 <p>Coder Combat utilizes various technologies including 
-  <ul>
-    <li> HTML5 </li>
-    <li> CSS 3 </li>
-    <li> Angular.js </li>
-    <li> Socket.IO </li> 
-    <li> Node.js </li>
-    <li> Express.js </li>
-    <li> MongoDB </li>
-    <li> Mongoose </li>
-  </ul>
+  <img src="http://www.tylermcginnis.com/images/coderCombatStack.png" alt="Coder Combat Tech Stack"/>
 </p>
 <p> I use Angular.js on the front end with the two text editors being Directives, and a Socket.IO, Http, and CountDown 
 service. My schema for Mongo involves a Title, Question, Parameter, and Answer. When a user clicks submit, an ng-click 
