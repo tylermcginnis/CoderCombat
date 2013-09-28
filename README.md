@@ -20,7 +20,7 @@ the winner and loser will both be notified and a ten second countdown will prepa
 <br />
 <br />
 <br />
-<img src="http://www.tylermcginnis.com/images/WinnerModal.png" alt="CoderCombatWinner"/>
+<img src="http://www.tylermcginnis.com/images/LoserModal.png" alt="CoderCombatWinner"/>
 <br />
 <br />
 <br />
