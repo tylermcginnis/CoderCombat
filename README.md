@@ -1,7 +1,6 @@
 CoderCombat
 ===========
 <h3>Brief Non-Technical Description </h3> 
-
 <p>Coder Combat is a real time one on one programming competition over the web. 
 It attemps to simulate the emotions felt in a technical interview while also improving your programming skills. 
 Competitors are paried up in a room and are then given an algorithm to solve. During the match each player will
@@ -14,3 +13,22 @@ the winner and loser will both be notified and a ten second countdown will prepa
 <br />
 <br />
 <img src="http://www.tylermcginnis.com/images/CoderCombatRoom.png" alt="Coder Combat Room" />
+<br />
+<br />
+<br />
+<h3> Technical Description </h3>
+<p>Coder Combat utilizes various technologies including 
+  <ul>
+    <li> HTML5 </li>
+    <li> CSS 3 </li>
+    <li> Angular.js </li>
+    <li> Socket.IO </li> 
+    <li> Node.js </li>
+    <li> Express.js </li>
+    <li> MongoDB </li>
+    <li> Mongoose </li>
+  </ul>
+</p>
+
+
+
