@@ -35,6 +35,8 @@ certain behavior that could happen in one specific room. This behavior needed to
 and the behavior of the users in that room. For example, if there are two rooms each containing two users, the game
 needs to be able to detect if both rooms have someone disconnect, and then pair those remaining users. 
 </p>
+<br />
+<img src="http://www.tylermcginnis.com/images/CoderCombatWaiting.png" alt="CoderCombat Waiting"/>
 
 
 
