@@ -17,6 +17,10 @@ angular.module('CoderCombatApp.controllers', [])
             console.log("An error occured on httpConnect");
           });
       function initialize(questionObj){
+        window.onbeforeunload = function() {
+            return "Are you sure you want to leave the match?";
+        }
+
         socket.on('join', function (room) {
             socket.emit('init', room);
         });
@@ -51,9 +55,10 @@ angular.module('CoderCombatApp.controllers', [])
         });
 
         socket.on('updateQuestion', function(questionObj){
+          console.log('this is it', questionObj);
           //Don't judge me for what I'm about to do, it will all be over soon.
           $('#coding-challenge-header').text(questionObj.title);
-          $('#problem').text(questionObj.challenge);
+          $('#problem').text(questionObj.question);
           //It's all over. No more DOM manipulation from the Cntrl using jQuery. Promise.
 
           $scope.challenge = questionObj.question;

@@ -30,6 +30,12 @@ angular.module('CoderCombatApp.directives', [])
           oEditor.setTheme("ace/theme/eclipse");
           oEditor.getSession().setUseWrapMode(true);
           oEditor.getSession().setMode("ace/mode/javascript");
+          oEditor.on('focus', function(){
+            alert('Hey! Don\'t cheat!');
+          });
+          oEditor.on('copy', function(){
+            alert('Cheater!');
+          });
           var editorText = oEditor.getSession().getValue();
           socket.emit('initial', editorText);
           oEditor.setReadOnly(true);
