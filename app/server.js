@@ -145,7 +145,6 @@ var room;
             roomCount--;
           }
       }
-
       socket.broadcast.to(room).emit('oppDisconnect');
 
       if(initCount === 0){

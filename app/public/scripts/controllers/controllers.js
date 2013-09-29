@@ -34,11 +34,22 @@ angular.module('CoderCombatApp.controllers', [])
         });
 
         socket.on('oppDisconnect', function(){
-          $modal({
-            template: '../../views/disconnect-modal.html',
-            keyboard: false,
-            scope: $scope
-          });
+          if($scope.$modal){
+            $scope.$modal('hide');
+            setTimeout(function(){
+            $modal({
+              template: '../../views/disconnect-modal.html',
+              keyboard: false,
+              scope: $scope
+            });
+            }, 1000);
+          } else {
+            $modal({
+              template: '../../views/disconnect-modal.html',
+              keyboard: false,
+              scope: $scope
+            });
+          }
         });
 
         socket.on('modalEnd', function(rand){
