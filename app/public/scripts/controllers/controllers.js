@@ -25,7 +25,8 @@ angular.module('CoderCombatApp.controllers', [])
             socket.emit('init', room);
         });
 
-        socket.on('modalStart', function(){
+        socket.on('firstStart', function(){
+          $scope.firstModal = 
           $modal({
             template: '../../views/pairing-modal.html',
             keyboard: false,
@@ -34,22 +35,41 @@ angular.module('CoderCombatApp.controllers', [])
         });
 
         socket.on('oppDisconnect', function(){
-          if($scope.$modal){
-            $scope.$modal('hide');
-            setTimeout(function(){
+          $scope.quitModal = 
             $modal({
               template: '../../views/disconnect-modal.html',
               keyboard: false,
-              scope: $scope
+              scope: $scope,
+              show: false
             });
-            }, 1000);
-          } else {
-            $modal({
-              template: '../../views/disconnect-modal.html',
-              keyboard: false,
-              scope: $scope
-            });
+
+          function showModal(){
+            $scope.$modal('show');
           }
+
+          if($scope.firstModal){
+            $scope.firstModal.then(function(){
+              $scope.$modal('hide');
+              setTimeout(showModal, 1000);
+            });
+          } else if($scope.loser){
+            $scope.loser.then(function(){
+              $scope.$modal('hide');
+              setTimeout(showModal, 1000);
+            });
+          } else if ($scope.quitModal){
+            $scope.quitModal.then(function(){
+              $scope.$modal('hide');
+              setTimeout(showModal, 1000);
+            });
+          } else if ($scope.winnerModal){
+            $scope.winnerModal.then(function(){
+              $scope.$modal('hide');
+              setTimeout(showModal, 1000);
+            });
+          } else {
+            showModal();
+          };
         });
 
         socket.on('modalEnd', function(rand){
@@ -60,13 +80,27 @@ angular.module('CoderCombatApp.controllers', [])
             questionObj[1].rnd = undefined;
             socket.emit('sendQuestion', questionObj);
           } 
-          if($scope.$modal){
-            $scope.$modal('hide');
+
+          if($scope.firstModal){
+            $scope.firstModal.then(function(){
+              $scope.$modal('hide');
+            });
+          } else if($scope.loser){
+            $scope.loser.then(function(){
+              $scope.$modal('hide');
+            });
+          } else if ($scope.quitModal){
+            $scope.quitModal.then(function(){
+              $scope.$modal('hide');
+            });
+          } else if ($scope.winnerModal){
+            $scope.winnerModal.then(function(){
+              $scope.$modal('hide');
+            });
           }
         });
 
         socket.on('updateQuestion', function(questionObj){
-          console.log('this is it', questionObj);
           //Don't judge me for what I'm about to do, it will all be over soon.
           $('#coding-challenge-header').text(questionObj.title);
           $('#problem').text(questionObj.question);
@@ -79,6 +113,7 @@ angular.module('CoderCombatApp.controllers', [])
         });
 
         socket.on('loserModal', function(room){
+          $scope.loser = 
           $modal({
             template: '../../views/loser-modal.html',
             keyboard: false,
@@ -113,6 +148,7 @@ angular.module('CoderCombatApp.controllers', [])
           socket.emit('youLost');
 
          //person who submitted it, congratuations modal
+         $scope.winnerModal = 
           $modal({
             template: '../../views/congratulations-modal.html',
             keyboard: false,

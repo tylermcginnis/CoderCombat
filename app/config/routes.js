@@ -6,7 +6,7 @@ module.exports = function(app) {
   var theMongo = 'mongodb://nodejitsu_tylermcginnis33:d6r2ldui99sbtgp2dc7055n28n@ds045998.mongolab.com:45998/nodejitsu_tylermcginnis33_nodejitsudb1384566209';
   var theLocal = 'localhost'
 
-  // var db = mongoose.createConnection(theMongo);
+  // var db = mongoose.createConnection(theMongo); //nodejitsue
   var db = mongoose.createConnection(theLocal, 'codercombat');
 
   db.on('error', console.error.bind(console, 'connection error:'));

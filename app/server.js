@@ -12,7 +12,7 @@ require('./config/routes.js')(app);
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, { log: false });
 
-var room;
+  var room;
   var initCount = 0;
   var roomCount = 0;
   var roomList = {};
@@ -39,20 +39,24 @@ var room;
           disconnectedRoom = property;
           roomList[disconnectedRoom].user1 = socket.id;
           socket.join(disconnectedRoom);
+          socket['room'] = disconnectedRoom;
           numOfUndefines--;
           if(numOfUndefines < 0){
             numOfUndefines = 0;
           }
-          socket.broadcast.emit('modalEnd');
+          var random = Math.floor(Math.random() * 8-1) + 2;
+          socket.broadcast.emit('modalEnd', random);
         } else if(roomList[property].user2 === 0){
             disconnectedRoom = property;
             roomList[disconnectedRoom].user2 = socket.id;
             socket.join(disconnectedRoom);
+            socket['room'] = disconnectedRoom;
             numOfUndefines--;
             if(numOfUndefines < 0){
               numOfUndefines = 0;
             }
-            socket.broadcast.emit('modalEnd');
+            var random = Math.floor(Math.random() * 8-1) + 2;
+            socket.broadcast.emit('modalEnd', random);
         }
       }
     } 
@@ -83,10 +87,9 @@ var room;
 
       if(roomList[room]){
         if(roomList[room].rnd === undefined){
-          roomList[room].rnd = Math.floor(Math.random() * questionObj.length-1) + 2;
+          roomList[room].rnd = Math.floor(Math.random() * 8-1) + 2;
         }
       }
-
       if(roomList[room]){
         if(roomList[room].rnd){
           if(questionObj[roomList[room].rnd]){
@@ -106,7 +109,7 @@ var room;
           io.sockets.in(room).emit('modalEnd');
         } else if(initCount % 2 === 1){
             console.log("Waiting for an opponent in room ", room);
-            io.sockets.in(room).emit('modalStart');
+            io.sockets.in(room).emit('firstStart');
         }
     });
 
@@ -117,11 +120,12 @@ var room;
 
     socket.on('anotherMatch', function(){
       var room = socket['room'];
-      var random = Math.floor(Math.random() * 10-1) + 2;
+      var random = Math.floor(Math.random() * 8-1) + 2;
       io.sockets.in(room).emit('modalEnd', random);
     });
 
     socket.on('disconnect', function (){
+      console.log('Disconnected');
       initCount -=1;
       var disconUser = socket.id;
       //for loop sets the disconnected user to 0 in roomList
@@ -201,8 +205,10 @@ var room;
               numOfUndefines = 0;
             }
 
-            var random = Math.floor(Math.random() * 10-1) + 2;
-            io.sockets.in(firstDisconnectedRoom).emit('modalEnd', random);
+            var random = Math.floor(Math.random() * 8-1) + 2;
+            setTimeout(function(){
+              io.sockets.in(firstDisconnectedRoom).emit('modalEnd', random);
+            }, 2000);
           }
         }, 500);
       }
@@ -259,7 +265,7 @@ var room;
                   }
 
                 numOfUndefines && (numOfUndefines--);
-                var random = Math.floor(Math.random() * 10-1) + 2;
+                var random = Math.floor(Math.random() * 8-1) + 2;
                 io.sockets.in(widowRoom).emit('modalEnd', random);
                 break;
               }
@@ -272,3 +278,4 @@ var room;
   });
 
 server.listen(3000);
+// server.listen(80); //nodejitsu
