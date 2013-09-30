@@ -1,6 +1,6 @@
 angular.module('CoderCombatApp.services', [])
     .factory('socket', function($rootScope){
-      var socket = io.connect(); //connects to socket server wherever I deploy it.
+      var socket = io.connect();
       return {
         on: function(eventName, callback){
           socket.on(eventName, function(){
