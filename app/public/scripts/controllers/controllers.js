@@ -58,6 +58,15 @@ angular.module('CoderCombatApp.controllers', [])
               setTimeout(showModal, 1000);
             });
           } else if ($scope.quitModal){
+            if($scope.winnerModal){
+              $scope.winnerModal.then(function(){
+                $scope.$modal('hide');
+              });
+            } else if($scope.loserModal){
+              $scope.loserModal.then(function(){
+                $scope.$modal('hide');
+              });
+            }
             $scope.quitModal.then(function(){
               $scope.$modal('hide');
               setTimeout(showModal, 1000);
