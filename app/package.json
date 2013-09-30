@@ -1,6 +1,10 @@
 {
   "name": "codercombat",
-  "version": "0.0.1-16",
+  "domains": [
+    "codercombat.com",
+    "www.codercombat.com"
+  ],
+  "version": "0.0.1-17",
   "dependencies": {
     "express": "~3.4.0",
     "mongodb": "~1.3.19",
