@@ -18,7 +18,7 @@ var io = require('socket.io').listen(server, { log: false });
     console.log(socket.id +  ' CONNECTED');
 
     var createRandomNumber = function(){
-      return Math.floor(Math.random() * 8-1) + 2;
+      return Math.floor(Math.random() * 9-1) + 2;
     }
 
     initCount += 1;
