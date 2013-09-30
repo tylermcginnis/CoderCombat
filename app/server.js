@@ -1,6 +1,8 @@
 /**
  * Module dependencies.
  */
+
+ //this should be deleted later
  
 var express = require('express');
 var http = require('http');
@@ -40,10 +42,11 @@ var io = require('socket.io').listen(server, { log: false });
           roomList[disconnectedRoom].user1 = socket.id;
           socket.join(disconnectedRoom);
           socket['room'] = disconnectedRoom;
-          numOfUndefines--;
-          if(numOfUndefines < 0){
-            numOfUndefines = 0;
-          }
+          // numOfUndefines--;
+          // if(numOfUndefines < 0){
+          //   numOfUndefines = 0;
+          // }
+          numOfUndefines && numOfUndefines--;
           var random = Math.floor(Math.random() * 8-1) + 2;
           socket.broadcast.emit('modalEnd', random);
         } else if(roomList[property].user2 === 0){
@@ -51,10 +54,11 @@ var io = require('socket.io').listen(server, { log: false });
             roomList[disconnectedRoom].user2 = socket.id;
             socket.join(disconnectedRoom);
             socket['room'] = disconnectedRoom;
-            numOfUndefines--;
-            if(numOfUndefines < 0){
-              numOfUndefines = 0;
-            }
+            // numOfUndefines--;
+            // if(numOfUndefines < 0){
+            //   numOfUndefines = 0;
+            // }
+            numOfUndefines && numOfUndefines--;
             var random = Math.floor(Math.random() * 8-1) + 2;
             socket.broadcast.emit('modalEnd', random);
         }
@@ -79,26 +83,26 @@ var io = require('socket.io').listen(server, { log: false });
     socket.on('sendQuestion', function(questionObj){
       var theQuestion = {};
       var room = socket['room'];
-      if(questionObj[1].rnd !== undefined){
-        if(roomList[room]){
+      if(questionObj[1].rnd !== undefined && (roomList[room].rnd = questionObj[1].rnd)){
+        // if(roomList[room]){
           roomList[room].rnd = questionObj[1].rnd;
-        }
+        // }
       }
 
-      if(roomList[room]){
-        if(roomList[room].rnd === undefined){
+      if(roomList[room] && (roomList[room].rnd === undefined)){
+        // if(roomList[room].rnd === undefined){
           roomList[room].rnd = Math.floor(Math.random() * 8-1) + 2;
-        }
+        // }
       }
-      if(roomList[room]){
-        if(roomList[room].rnd){
-          if(questionObj[roomList[room].rnd]){
+      if(roomList[room] && (roomList[room].rnd) && (questionObj[roomList[room].rnd])){
+        // if(roomList[room].rnd){
+        //   if(questionObj[roomList[room].rnd]){
             theQuestion = questionObj[roomList[room].rnd];
 
             //only send the final quesiton to updateQuestion
             io.sockets.in(room).emit('updateQuestion', theQuestion);
-          }
-        }
+        //   }
+        // }
       }
 
     });
@@ -142,18 +146,14 @@ var io = require('socket.io').listen(server, { log: false });
 
           if(roomList[prop].user1 === 0 && roomList[prop].user2 === 0){
             numOfUndefines -= 2
-            if(numOfUndefines < 0){
-              numOfUndefines = 0;
-            }
+            numOfUndefines && (numOfUndefines = 0);
             delete roomList[prop];
             roomCount--;
           }
       }
       socket.broadcast.to(room).emit('oppDisconnect');
 
-      if(initCount === 0){
-        numOfUndefines = 0;
-      } 
+      !initCount && (numOfUndefines = 0);
 
       //two people with disconnected partners should be paired
       if(numOfUndefines % 2 === 0 && numOfUndefines > 0){
@@ -201,9 +201,7 @@ var io = require('socket.io').listen(server, { log: false });
             socketNew.join(firstDisconnectedRoom);
             socketNew.room = firstDisconnectedRoom;
             numOfUndefines -= 2;
-            if(numOfUndefines < 0){
-              numOfUndefines = 0;
-            }
+            !numOfUndefines && (numOfUndefines = 0);
 
             var random = Math.floor(Math.random() * 8-1) + 2;
             setTimeout(function(){
@@ -214,9 +212,7 @@ var io = require('socket.io').listen(server, { log: false });
       }
 
       //guard on if a player disconnects before getting a partner
-      if(initCount === 0){
-        numOfUndefines = 0;
-      } 
+      !initCount && (numOfUndefines = 0);
 
       if(roomList[socket['room']]){
         if(Object.keys(roomList[socket['room']]).length === 1 && numOfUndefines === 1){
@@ -245,8 +241,7 @@ var io = require('socket.io').listen(server, { log: false });
               }
             }
 
-            if(roomList[roomNum]){
-              if(Object.keys(roomList[roomNum]).length === 1){
+              if(roomList[roomNum] && Object.keys(roomList[roomNum]).length === 1){
                 newPlayerRoom = roomNum;
                 newPlayer = io.sockets.clients(newPlayerRoom)[0];
                 newPlayer.leave(newPlayerRoom);
@@ -269,7 +264,6 @@ var io = require('socket.io').listen(server, { log: false });
                 io.sockets.in(widowRoom).emit('modalEnd', random);
                 break;
               }
-            }
           }
         }, 500);
       }
