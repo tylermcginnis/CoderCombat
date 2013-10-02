@@ -32,7 +32,7 @@ the winner and loser will both be notified and a ten second countdown will prepa
 service. My schema for Mongo involves a Title, Question, Parameter, and Answer. When a user clicks submit, an ng-click 
 event is fired, I then take the code that was in his or her editor, parse it to be in the correct format, pass in the 
 Parameter from the DB, evaluate it, then compare the result to the actual answer. </p>
-<p> Socket.IO is the main contributer of this application. I used Sockets in order to keep a constant live stream 
+<p> Socket.IO is the main contributor of this application. I used Sockets in order to keep a constant live stream 
 going between both users and their editors. </p> 
 <br /><br />
 <h3> Challenges </h3> 
