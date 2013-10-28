@@ -250,5 +250,5 @@ var io = require('socket.io').listen(server, { log: false });
     });
   });
 
-server.listen(3000);
-// server.listen(80); //nodejitsu
+// server.listen(3000);
+server.listen(80); //nodejitsu
