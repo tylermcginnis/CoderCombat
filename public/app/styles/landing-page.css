@@ -1,0 +1,70 @@
+html, body{
+  height: 100%;
+  width: 100%;
+}
+.main-container {
+  height: 100%;
+  width: 100%;
+}
+.cc-blue {
+  background: #3b9bdb;
+  color: white;
+}
+
+.cc-blue:hover {
+  background: rgba(59, 155, 219, 0.87);
+  color: white;
+}
+
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 75px;
+    height: 75px;
+    padding-top: 0;
+    font-size: 20px;
+}
+
+.jumbotron {
+  text-align: center;
+  background-color: transparent;
+  padding: 20px 0;
+}
+
+.jumbotron h1 {
+  font-weight: 200;
+}
+
+.emphasis {
+  font-weight: 300;
+  font-style: italic;
+  font-size: 72px;
+}
+
+.vs {
+  text-align: center;
+  font-size: 66px;
+}
+
+.example-photo {
+  width: 100%;
+}
+
+.up {
+  position: relative;
+  bottom: 40px;
+}
+
+.space {
+  /*width: 290px;*/
+  width: 148px;
+  margin: 0px auto;
+}
+
+.l-gray:hover {
+  background: rgba(219, 219, 219, 0.85);
+}
+
+.btn-success a{
+  color: #fff;
+  text-decoration: none;
+}

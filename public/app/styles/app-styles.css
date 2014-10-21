@@ -1,0 +1,177 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+.container-fluid{
+  height: 95%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.row {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.navbar {
+  margin-bottom: 0;
+  border-bottom: 2px solid #e7e7e7;
+}
+.cc-blue {
+  background: #3b9bdb;
+  color: white;
+}
+.cc-blue:hover {
+  background: rgba(59, 155, 219, 0.87);
+  color: white;
+}
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 60px;
+    height: 60px;
+    padding-top: 0;
+    font-size: 16px;
+}
+
+.navbar-nav.navbar-right:last-child {
+  margin-right: 0;
+}
+
+.players-editor {
+  height: 100%;
+  width: 60%;
+  border-right: 2px solid #e7e7e7;
+}
+
+.right-side {
+  height: 100%;
+  width: 40%;
+}
+
+.question-container {
+  height: 50%;
+  width: 100%;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-size: 22px;
+}
+
+.opponents-editor {
+  height: 50%;
+  width: 100%;
+  border-top: 2px solid #e7e7e7;
+}
+
+.modal-header {
+  background: #f8f8f8;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.modal-header img {
+  width: 201px;
+  margin: 0 auto;
+  display: block;
+}
+.modal-body {
+  text-align: center;
+  font-size: 29px;
+  font-weight: 200;
+}
+body .modal-content {
+  box-shadow: 0 0 0 0;
+  border: 0;
+}
+
+
+/*Overrides Bootstrap*/
+.mute {
+  color: rgba(119, 119, 119, 0.54) !important;
+}
+.not-mute {
+  color: #333 !important;
+  background: #E7E7E7 !important;
+}
+.not-mute:hover{
+  background: #E4E4E4 !important
+}
+
+
+/* Spinner */
+.spinner {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  border-radius: 50%;
+  border: 2px solid #3b9bdb;
+  margin: 10px auto;
+}
+.spinner:after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 2px;
+  background: #4f5b63;
+  top: 57px;
+  left: 57px;
+  -ms-transform-origin: 1px 1px;
+  -webkit-transform-origin: 1px 1px;
+  -moz-transform-origin: 1px 1px;
+  transform-origin: 1px 1px;
+  -webkit-animation: spin 2s infinite linear;
+  -moz-animation: spin 2s infinite linear;
+  -ms-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+.spinner:before {
+  content: "";
+  position: absolute;
+  left: 56px;
+  top: 56px;
+  height: 5px;
+  width: 5px;
+  background: #4f5b63;
+  border-radius: 50%;
+  -webkit-animation: expand 1s infinite linear alternate;
+  -moz-animation: expand 1s infinite linear alternate;
+  -ms-animation: expand 1s infinite linear alternate;
+  animation: expand 1s infinite linear alternate;
+};
+@keyframes spin {from {transform: rotate(0);}to {transform: rotate(360deg);}}
+@keyframes expand {from {transform: scale(1);}to {transform: scale(1.5);}}
+@-moz-keyframes spin {from {-moz-transform: rotate(0);}to {-moz-transform: rotate(360deg);}}
+@-moz-keyframes expand {from {-moz-transform: scale(1);}to {-moz-transform: scale(1.5);}}
+@-webkit-keyframes spin {from {-webkit-transform: rotate(0);}to {-webkit-transform: rotate(360deg);}}
+@-webkit-keyframes expand {from {-webkit-transform: scale(1);}to {-webkit-transform: scale(1.5);}}
+@-ms-keyframes spin {from {-ms-transform: rotate(0);}to {-webkit-transform: rotate(360deg);}}
+@-ms-keyframes expand {from {-ms-transform: scale(1);}to {-webkit-transform: scale(1.5);}}
+
+
+.inner-timer {
+  text-align: center;
+  font-size: 50px;
+  margin-top: 20px;
+}
+
+/* Ace Editor Overrides */
+.ace_editor {
+  height: 100%;
+}
+.ace_print-margin {
+  display: none;
+}
+.ace-eclipse .ace_marker-layer .ace_active-line {
+  background: transparent !important;
+}
+.oEditor .ace_content {
+  cursor: not-allowed;
+}
+body .ace-eclipse .ace_gutter {
+  background: #f8f8f8;
+  border-right: 2px solid #e7e7e7;
+  color: #777;
+}
