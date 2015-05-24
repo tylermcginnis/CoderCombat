@@ -45,11 +45,10 @@ var placeInRoom = function(skt, io, questionArrLength){
   var howManyRooms = keys.length;
   var lastRoomNumber = howManyRooms ? parseInt(keys[keys.length - 1], 10) : 0; 
   var lastRoomArray = howManyRooms ? rooms[lastRoomNumber] : [];
-  if(lastRoomArray.length <= 1){
-    joinRoom(skt, io, lastRoomNumber, questionArrLength);
-  } else {
-    joinRoom(skt, io, lastRoomNumber + 1, questionArrLength)
+  if(lastRoomArray.length > 1){
+    lastRoomNumber += 1;
   }
+  joinRoom(skt, io, lastRoomNumber + 1, questionArrLength)
 };
 
 module.exports.initUser = function(socket, io, name, questionArrLength){
